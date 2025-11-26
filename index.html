@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chamath Adithya — Portfolio</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+        }
+
+        header {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #9C27B0, #004d00, #4CAF50, #C6FF89, #FFFF00);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+
+        .section {
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            transition: 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #C6FF89;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        a {
+            color: #C6FF89;
+            text-decoration: none;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #4CAF50;
+            color: #000;
+            border-radius: 8px;
+            margin-top: 25px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: #C6FF89;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Chamath Adithya</h1>
+        <h2>IoT Developer • AI Engineer • Full-Stack Developer</h2>
+        <a class="contact-btn" href="mailto:chamathadithya@example.com">Contact Me</a>
+    </header>
+
+    <section class="section">
+        <h2 style="font-weight:700;">About Me</h2>
+        <p>
+            I am an innovative developer specializing in IoT systems, AI-driven solutions, 
+            cloud-connected devices, and full-stack web applications. I build scalable, 
+            modern systems that blend hardware, software, and intelligence to solve real-world problems.
+        </p>
+    </section>
+
+    <section class="section">
+        <h2 style="font-weight:700;">Projects</h2>
+
+        <div class="projects">
+            <div class="card">
+                <h3>GrowTower IoT System</h3>
+                <p>Smart agriculture system with MQTT, OTA, ESP32-C6, NestJS backend, and Next.js dashboard.</p>
+            </div>
+
+            <div class="card">
+                <h3>WiBLE — BLE/Wi-Fi Provisioning</h3>
+                <p>A unified secure communication layer for BLE-based device onboarding into Wi-Fi networks.</p>
+            </div>
+
+            <div class="card">
+                <h3>Smart IoT App</h3>
+                <p>IoT device manager with real-time analytics, dashboards, alerts, and mobile app integration.</p>
+            </div>
+
+            <div class="card">
+                <h3>Dayora — Audit Man-Day Calculator</h3>
+                <p>Next.js professional tool for calculating audit workloads using smooth UI/UX & custom themes.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 style="font-weight:700;">Skills</h2>
+        <p>ESP32 • IoT • MQTT • AI • FastAPI • NestJS • PostgreSQL • React • Next.js • Flutter • Tailwind CSS</p>
+    </section>
+
+    <footer>
+        © 2025 Chamath Adithya. All rights reserved.
+    </footer>
+
+</body>
+</html>

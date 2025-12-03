@@ -1,150 +1,792 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chamath Adithya — Portfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SOLVEO OS v2.0 | Chamath Adithya</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Rajdhani', 'sans-serif'],
+                        mono: ['Share Tech Mono', 'monospace'],
+                        sci: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        cyan: '#00f3ff',
+                        magenta: '#ff00aa',
+                        void: '#050510',
+                        glass: 'rgba(5, 10, 20, 0.75)',
+                        'glass-border': 'rgba(0, 243, 255, 0.2)',
+                    },
+                    animation: {
+                        'spin-slow': 'spin 20s linear infinite',
+                        'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glitch': 'glitch 1s linear infinite',
+                    },
+                    keyframes: {
+                        glitch: {
+                            '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                            '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                            '62%': { transform: 'translate(0,0) skew(5deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
+        /* Core OS Styles */
         body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: #0f0f0f;
-            color: #fff;
+            background-color: #000;
+            overflow: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2300f3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>') 12 12, auto;
         }
 
-        header {
-            padding: 80px 20px;
-            text-align: center;
+        /* Scanline Overlay */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
         }
 
-        h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #9C27B0, #004d00, #4CAF50, #C6FF89, #FFFF00);
-            -webkit-background-clip: text;
-            color: transparent;
+        /* CRT Flicker */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
         }
 
-        h2 {
-            font-size: 1.3rem;
-            opacity: 0.85;
-            font-weight: 400;
+        /* Window Styling */
+        .os-window {
+            position: absolute;
+            background: rgba(5, 10, 20, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+            border-radius: 4px; /* Slight rounded corners */
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            overflow: hidden;
+            transition: opacity 0.2s, transform 0.2s;
+            transform: scale(0.95);
+            opacity: 0;
         }
 
-        .section {
-            padding: 60px 20px;
-            max-width: 900px;
-            margin: auto;
+        .os-window.active {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+            z-index: 50;
+        }
+        
+        /* Mobile Specifics */
+        @media (max-width: 768px) {
+            .os-window.active {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                border: none;
+                border-radius: 0;
+                transform: none;
+            }
+            .desktop-icon-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .drag-handle {
+                cursor: default !important;
+            }
         }
 
-        .projects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+        /* Custom Scrollbar inside windows */
+        .window-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .window-content::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.5);
+        }
+        .window-content::-webkit-scrollbar-thumb {
+            background: #00f3ff;
         }
 
-        .card {
-            background: #1a1a1a;
-            border-radius: 12px;
-            padding: 20px;
-            transition: 0.3s ease;
+        /* Boot Screen Text */
+        .boot-text {
+            text-shadow: 0 0 5px #00f3ff;
         }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        
+        /* Glitch Effect Class */
+        .glitch-text:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: #ff00aa;
         }
-
-        .card h3 {
-            margin-top: 0;
-            color: #C6FF89;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-
-        a {
-            color: #C6FF89;
-            text-decoration: none;
-        }
-
-        .contact-btn {
+        
+        /* Terminal Blinking Cursor */
+        .terminal-cursor {
             display: inline-block;
-            padding: 12px 25px;
-            background: #4CAF50;
-            color: #000;
-            border-radius: 8px;
-            margin-top: 25px;
-            font-weight: 600;
-            transition: 0.3s;
+            width: 8px;
+            height: 15px;
+            background-color: #00f3ff;
+            animation: blink 1s step-end infinite;
         }
-
-        .contact-btn:hover {
-            background: #C6FF89;
-        }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
+<body class="crt font-sans text-gray-200 selection:bg-cyan selection:text-black">
 
-<body>
+    <!-- 3D Background -->
+    <canvas id="bg-canvas" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
+    
+    <!-- Scanlines -->
+    <div class="scanlines"></div>
 
-    <header>
-        <h1>Chamath Adithya</h1>
-        <h2>IoT Developer • AI Engineer • Full-Stack Developer</h2>
-        <a class="contact-btn" href="mailto:chamathadithya@example.com">Contact Me</a>
-    </header>
-
-    <section class="section">
-        <h2 style="font-weight:700;">About Me</h2>
-        <p>
-            I am an innovative developer specializing in IoT systems, AI-driven solutions, 
-            cloud-connected devices, and full-stack web applications. I build scalable, 
-            modern systems that blend hardware, software, and intelligence to solve real-world problems.
-        </p>
-    </section>
-
-    <section class="section">
-        <h2 style="font-weight:700;">Projects</h2>
-
-        <div class="projects">
-            <div class="card">
-                <h3>GrowTower IoT System</h3>
-                <p>Smart agriculture system with MQTT, OTA, ESP32-C6, NestJS backend, and Next.js dashboard.</p>
+    <!-- Boot Sequence Overlay -->
+    <div id="boot-screen" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center font-mono text-cyan p-4">
+        <div class="w-full max-w-2xl">
+            <div id="boot-log" class="text-xs md:text-sm space-y-1 mb-8 h-64 overflow-hidden border-l-2 border-cyan pl-4">
+                <!-- JS will populate this -->
             </div>
-
-            <div class="card">
-                <h3>WiBLE — BLE/Wi-Fi Provisioning</h3>
-                <p>A unified secure communication layer for BLE-based device onboarding into Wi-Fi networks.</p>
+            <div class="w-full bg-gray-900 h-1 rounded overflow-hidden relative">
+                <div id="boot-progress" class="absolute top-0 left-0 h-full bg-cyan shadow-[0_0_10px_#00f3ff] transition-all duration-200" style="width: 0%"></div>
             </div>
+            <div class="text-center mt-2 text-xs animate-pulse">INITIALIZING CORE SYSTEMS...</div>
+        </div>
+    </div>
 
-            <div class="card">
-                <h3>Smart IoT App</h3>
-                <p>IoT device manager with real-time analytics, dashboards, alerts, and mobile app integration.</p>
+    <!-- Main OS Interface -->
+    <div id="os-interface" class="fixed inset-0 hidden flex-col">
+        
+        <!-- Top Bar (System Stats) -->
+        <div class="h-8 bg-black/80 backdrop-blur border-b border-white/10 flex items-center justify-between px-4 text-xs font-mono text-cyan select-none z-40">
+            <div class="flex items-center gap-4">
+                <span class="font-bold">SOLVEO OS v2.0</span>
+                <span class="hidden md:inline text-gray-500">|</span>
+                <span class="hidden md:inline text-magenta" id="cpu-stat">CPU: 12%</span>
+                <span class="hidden md:inline text-gray-500">|</span>
+                <span class="hidden md:inline text-green-400" id="mem-stat">MEM: 4.2GB</span>
             </div>
-
-            <div class="card">
-                <h3>Dayora — Audit Man-Day Calculator</h3>
-                <p>Next.js professional tool for calculating audit workloads using smooth UI/UX & custom themes.</p>
+            <div class="flex items-center gap-4">
+                <span id="location-stat">LOC: SRI LANKA</span>
+                <span id="clock" class="text-white font-bold">00:00:00</span>
             </div>
         </div>
-    </section>
 
-    <section class="section">
-        <h2 style="font-weight:700;">Skills</h2>
-        <p>ESP32 • IoT • MQTT • AI • FastAPI • NestJS • PostgreSQL • React • Next.js • Flutter • Tailwind CSS</p>
-    </section>
+        <!-- Desktop Area -->
+        <div class="flex-grow relative p-4 md:p-8" id="desktop-area">
+            
+            <!-- Desktop Icons Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-1 gap-6 w-full md:w-24 desktop-icon-grid">
+                
+                <!-- About Icon -->
+                <button onclick="openWindow('about-window')" class="group flex flex-col items-center gap-2 p-2 hover:bg-white/5 rounded transition-colors focus:outline-none">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-black/50 border border-cyan/50 flex items-center justify-center group-hover:shadow-[0_0_15px_#00f3ff] group-hover:border-cyan transition-all relative overflow-hidden">
+                        <div class="absolute inset-0 bg-cyan/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+                        <i class="fas fa-user-astronaut text-2xl text-cyan group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <span class="text-xs font-mono bg-black/50 px-2 py-0.5 rounded text-shadow group-hover:text-cyan">Profile.exe</span>
+                </button>
 
-    <footer>
-        © 2025 Chamath Adithya. All rights reserved.
-    </footer>
+                <!-- Projects Icon -->
+                <button onclick="openWindow('projects-window')" class="group flex flex-col items-center gap-2 p-2 hover:bg-white/5 rounded transition-colors focus:outline-none">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-black/50 border border-magenta/50 flex items-center justify-center group-hover:shadow-[0_0_15px_#ff00aa] group-hover:border-magenta transition-all relative overflow-hidden">
+                        <div class="absolute inset-0 bg-magenta/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+                        <i class="fas fa-folder-open text-2xl text-magenta group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <span class="text-xs font-mono bg-black/50 px-2 py-0.5 rounded text-shadow group-hover:text-magenta">Projects_DB</span>
+                </button>
 
+                <!-- Skills Icon -->
+                <button onclick="openWindow('skills-window')" class="group flex flex-col items-center gap-2 p-2 hover:bg-white/5 rounded transition-colors focus:outline-none">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-black/50 border border-green-500/50 flex items-center justify-center group-hover:shadow-[0_0_15px_#00ff00] group-hover:border-green-500 transition-all relative overflow-hidden">
+                         <div class="absolute inset-0 bg-green-500/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+                        <i class="fas fa-microchip text-2xl text-green-500 group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <span class="text-xs font-mono bg-black/50 px-2 py-0.5 rounded text-shadow group-hover:text-green-400">Skills_Matrix</span>
+                </button>
+
+                <!-- Terminal Icon -->
+                <button onclick="openWindow('terminal-window')" class="group flex flex-col items-center gap-2 p-2 hover:bg-white/5 rounded transition-colors focus:outline-none">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-black/50 border border-white/30 flex items-center justify-center group-hover:shadow-[0_0_15px_#ffffff] group-hover:border-white transition-all relative overflow-hidden">
+                         <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+                        <i class="fas fa-terminal text-2xl text-gray-300 group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <span class="text-xs font-mono bg-black/50 px-2 py-0.5 rounded text-shadow group-hover:text-white">Term_Uplink</span>
+                </button>
+            </div>
+
+            <!-- WINDOWS -->
+
+            <!-- 1. Profile Window -->
+            <div id="about-window" class="os-window w-full md:w-[800px] h-full md:h-[500px] top-0 md:top-[10%] md:left-[20%]">
+                <!-- Header -->
+                <div class="h-8 bg-gray-900 border-b border-cyan/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
+                    <div class="flex items-center gap-2 text-cyan font-mono text-xs">
+                        <i class="fas fa-user-circle"></i>
+                        <span>USER_PROFILE :: CHAMATH_ADITHYA</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="minimizeWindow('about-window')" class="hover:text-white text-gray-500"><i class="fas fa-minus"></i></button>
+                        <button onclick="maximizeWindow('about-window')" class="hover:text-white text-gray-500 hidden md:block"><i class="fas fa-expand"></i></button>
+                        <button onclick="closeWindow('about-window')" class="hover:text-red-500 text-gray-500"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- Content -->
+                <div class="window-content flex-grow overflow-y-auto p-6 bg-black/40 text-gray-300">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <!-- Avatar Column -->
+                        <div class="w-full md:w-1/3 flex flex-col items-center">
+                            <div class="relative w-48 h-48 mb-6 group">
+                                <div class="absolute inset-0 border-2 border-cyan rounded-full animate-spin-slow border-dashed"></div>
+                                <div class="absolute inset-2 border border-magenta rounded-full"></div>
+                                <img src="https://avatars.githubusercontent.com/u/159120632?s=400&u=68fd0384ac76119a0b4d744a0f621af74109a422&v=4" alt="Chamath" class="w-full h-full rounded-full object-cover p-4 opacity-90 group-hover:opacity-100 transition-opacity">
+                            </div>
+                            <div class="text-center w-full">
+                                <h2 class="text-2xl font-sci text-white mb-1">CHAMATH ADITHYA</h2>
+                                <p class="text-cyan font-mono text-sm mb-4">FOUNDER & CTO @ SOLVEO</p>
+                                <div class="flex justify-center gap-4 text-xl">
+                                    <a href="https://github.com/Chamath-Adithya" target="_blank" class="text-gray-400 hover:text-white hover:scale-125 transition-transform"><i class="fab fa-github"></i></a>
+                                    <a href="https://www.linkedin.com/in/chamath-adithya-senanayaka-90264936b/" target="_blank" class="text-gray-400 hover:text-blue-400 hover:scale-125 transition-transform"><i class="fab fa-linkedin"></i></a>
+                                    <a href="mailto:achamath1@gmail.com" class="text-gray-400 hover:text-red-400 hover:scale-125 transition-transform"><i class="fas fa-envelope"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bio Column -->
+                        <div class="w-full md:w-2/3 font-sans text-lg leading-relaxed">
+                            <div class="mb-6 p-4 border-l-2 border-cyan bg-cyan/5">
+                                <h3 class="font-sci text-cyan mb-2 text-xl">MISSION STATUS</h3>
+                                <p>Merging software, <span class="text-white font-bold">IoT</span>, <span class="text-white font-bold">Cybersecurity</span>, and <span class="text-white font-bold">Automation</span> to build next-generation secure frameworks.</p>
+                            </div>
+                            
+                            <h3 class="font-mono text-magenta mb-4 border-b border-white/10 pb-2">> BIO_DATA_LOG</h3>
+                            <ul class="space-y-3 font-mono text-sm">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-map-marker-alt text-cyan mt-1"></i>
+                                    <span>Based in <strong class="text-white">Sri Lanka</strong>. Currently architecting enterprise IoT security.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-brain text-cyan mt-1"></i>
+                                    <span>Passionate about <strong class="text-white">TinyML</strong>, Edge AI, and System Architecture.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-chess text-cyan mt-1"></i>
+                                    <span>Strategic Thinker: Chess player & complex problem solver.</span>
+                                </li>
+                            </ul>
+
+                            <div class="mt-8 flex gap-4">
+                                <button onclick="openWindow('projects-window')" class="px-4 py-2 bg-cyan/10 border border-cyan text-cyan hover:bg-cyan hover:text-black font-mono text-xs transition-all w-full">VIEW PROJECTS</button>
+                                <button onclick="openWindow('terminal-window')" class="px-4 py-2 bg-transparent border border-gray-600 text-gray-400 hover:border-white hover:text-white font-mono text-xs transition-all w-full">INIT TERMINAL</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Projects Window -->
+            <div id="projects-window" class="os-window w-full md:w-[900px] h-full md:h-[600px] top-0 md:top-[15%] md:left-[15%]">
+                <div class="h-8 bg-gray-900 border-b border-magenta/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
+                    <div class="flex items-center gap-2 text-magenta font-mono text-xs">
+                        <i class="fas fa-folder-tree"></i>
+                        <span>PROJECT_DATABASE :: REPOSITORY_ACCESS</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="closeWindow('projects-window')" class="hover:text-red-500 text-gray-500"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- File Explorer Style Content -->
+                <div class="window-content flex-grow flex flex-col md:flex-row bg-black/80">
+                    <!-- Sidebar -->
+                    <div class="w-full md:w-48 bg-gray-900/50 border-r border-white/5 p-4 hidden md:block">
+                        <div class="text-xs font-mono text-gray-500 mb-2">DIRECTORY</div>
+                        <ul class="space-y-2 text-sm font-mono text-cyan">
+                            <li class="cursor-pointer hover:bg-white/5 p-1 rounded"><i class="fas fa-hdd mr-2"></i> root</li>
+                            <li class="cursor-pointer hover:bg-white/5 p-1 rounded pl-4 text-white font-bold"><i class="fas fa-folder-open mr-2 text-magenta"></i> projects</li>
+                            <li class="cursor-pointer hover:bg-white/5 p-1 rounded pl-8 text-gray-400"><i class="fab fa-github mr-2"></i> archived</li>
+                        </ul>
+                    </div>
+                    <!-- Grid -->
+                    <div class="flex-grow p-6 overflow-y-auto">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            
+                            <!-- Card 1 -->
+                            <div class="border border-white/10 bg-white/5 p-4 hover:border-magenta/50 hover:bg-white/10 transition-all group">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-sci font-bold text-white group-hover:text-magenta">GoofyBLEProvisioning</h3>
+                                    <span class="text-[10px] font-mono bg-magenta/20 text-magenta px-1">C++</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mb-4 font-mono leading-relaxed">
+                                    ESP32 Arduino library for BLE WiFi provisioning, EEPROM storage, and sensor data transmission.
+                                </p>
+                                <a href="https://github.com/Chamath-Adithya/GoofyBLEProvisioning" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1">
+                                    ACCESS_CODE <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+
+                            <!-- Card 2 -->
+                            <div class="border border-white/10 bg-white/5 p-4 hover:border-cyan/50 hover:bg-white/10 transition-all group">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-sci font-bold text-white group-hover:text-cyan">Dayora Man-Day Calc</h3>
+                                    <span class="text-[10px] font-mono bg-cyan/20 text-cyan px-1">TS</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mb-4 font-mono leading-relaxed">
+                                    Specialized audit man-day calculator using TypeScript for precise project estimation.
+                                </p>
+                                <a href="https://github.com/Chamath-Adithya/Dayora-Audit-Man-Day-Calculator" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1">
+                                    ACCESS_CODE <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+
+                            <!-- Card 3 -->
+                            <div class="border border-white/10 bg-white/5 p-4 hover:border-green-400/50 hover:bg-white/10 transition-all group">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-sci font-bold text-white group-hover:text-green-400">Water Quality Detector</h3>
+                                    <span class="text-[10px] font-mono bg-green-400/20 text-green-400 px-1">IoT</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mb-4 font-mono leading-relaxed">
+                                    Embedded C++ project for Arduino to detect and analyze water quality metrics in real-time.
+                                </p>
+                                <a href="https://github.com/Chamath-Adithya/Arduino_Water_Cuality_Detector" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1">
+                                    ACCESS_CODE <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+
+                            <!-- Card 4 -->
+                            <div class="border border-white/10 bg-white/5 p-4 hover:border-yellow-400/50 hover:bg-white/10 transition-all group">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-sci font-bold text-white group-hover:text-yellow-400">HX711 Sensor Lib</h3>
+                                    <span class="text-[10px] font-mono bg-yellow-400/20 text-yellow-400 px-1">Hardware</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mb-4 font-mono leading-relaxed">
+                                    Implementation and interface code for HX711 load cell amplifiers/sensors.
+                                </p>
+                                <a href="https://github.com/Chamath-Adithya/HX711-Pleasure_Sensor" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1">
+                                    ACCESS_CODE <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Skills Window -->
+            <div id="skills-window" class="os-window w-full md:w-[600px] h-full md:h-[500px] top-0 md:top-[20%] md:left-[30%]">
+                 <div class="h-8 bg-gray-900 border-b border-green-500/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
+                    <div class="flex items-center gap-2 text-green-500 font-mono text-xs">
+                        <i class="fas fa-code-branch"></i>
+                        <span>SYSTEM_CAPABILITIES :: SKILL_MATRIX</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="closeWindow('skills-window')" class="hover:text-red-500 text-gray-500"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="window-content p-6 overflow-y-auto bg-black/90">
+                    <div class="space-y-6">
+                        <!-- Skill Group -->
+                        <div>
+                            <h4 class="text-cyan font-sci text-sm mb-3 border-b border-gray-700 pb-1">IoT & EMBEDDED</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="bg-gray-800 p-2 rounded text-xs font-mono text-gray-300 flex justify-between"><span>Arduino</span><span class="text-green-400">98%</span></div>
+                                <div class="bg-gray-800 p-2 rounded text-xs font-mono text-gray-300 flex justify-between"><span>ESP32</span><span class="text-green-400">95%</span></div>
+                                <div class="bg-gray-800 p-2 rounded text-xs font-mono text-gray-300 flex justify-between"><span>TinyML</span><span class="text-yellow-400">85%</span></div>
+                                <div class="bg-gray-800 p-2 rounded text-xs font-mono text-gray-300 flex justify-between"><span>MQTT</span><span class="text-green-400">92%</span></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-magenta font-sci text-sm mb-3 border-b border-gray-700 pb-1">FULL STACK & CLOUD</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="bg-gray-800 p-2 rounded text-xs font-mono text-gray-300 flex justify-between"><span>React/Next</span><span class="text-green-400">90%</span></div>
+                                <div class="bg-gray-800 p-2 rounded text-xs font-mono text-gray-300 flex justify-between"><span>Node.js</span><span class="text-green-400">88%</span></div>
+                                <div class="bg-gray-800 p-2 rounded text-xs font-mono text-gray-300 flex justify-between"><span>AWS</span><span class="text-yellow-400">80%</span></div>
+                                <div class="bg-gray-800 p-2 rounded text-xs font-mono text-gray-300 flex justify-between"><span>Docker</span><span class="text-green-400">85%</span></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-red-400 font-sci text-sm mb-3 border-b border-gray-700 pb-1">SECURITY & OPS</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="bg-gray-800 p-2 rounded text-xs font-mono text-gray-300 flex justify-between"><span>PenTesting</span><span class="text-yellow-400">85%</span></div>
+                                <div class="bg-gray-800 p-2 rounded text-xs font-mono text-gray-300 flex justify-between"><span>Linux</span><span class="text-green-400">95%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Terminal Window -->
+            <div id="terminal-window" class="os-window w-full md:w-[600px] h-full md:h-[400px] top-0 md:top-[25%] md:left-[25%] border-gray-500">
+                <div class="h-8 bg-gray-800 border-b border-gray-600 flex items-center justify-between px-3 drag-handle cursor-move select-none">
+                    <div class="flex items-center gap-2 text-gray-300 font-mono text-xs">
+                        <i class="fas fa-terminal"></i>
+                        <span>bash -- solvo-term</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="closeWindow('terminal-window')" class="hover:text-red-500 text-gray-500"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="window-content bg-black/95 p-4 font-mono text-xs md:text-sm text-gray-300 h-full overflow-y-auto" onclick="document.getElementById('term-input').focus()">
+                    <div class="mb-2">
+                        <span class="text-green-400">root@solvo-os</span>:<span class="text-blue-400">~</span>$ Welcome to SOLVEO Terminal v2.0
+                    </div>
+                    <div class="mb-2">Type 'help' to see available commands.</div>
+                    
+                    <div id="terminal-output" class="space-y-1 mb-2"></div>
+                    
+                    <div class="flex items-center">
+                        <span class="text-green-400 mr-2">root@solvo-os:~$</span>
+                        <input type="text" id="term-input" class="bg-transparent border-none outline-none text-white flex-grow font-mono" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Taskbar -->
+        <div class="h-12 bg-black/90 border-t border-white/10 flex items-center px-2 md:px-4 z-50 backdrop-blur-md">
+            <!-- Start Button -->
+            <button class="flex items-center gap-2 px-3 py-1.5 bg-cyan/10 hover:bg-cyan/20 border border-cyan/30 rounded text-cyan font-bold font-sci text-sm transition-all mr-4">
+                <i class="fas fa-power-off"></i> <span class="hidden md:inline">START</span>
+            </button>
+            
+            <!-- Open Windows List (Mobile: Hidden/Condensed) -->
+            <div class="flex-grow flex gap-2 overflow-x-auto hide-scrollbar" id="taskbar-apps">
+                <!-- Dynamically populated -->
+            </div>
+
+            <!-- Tray Icons -->
+            <div class="flex items-center gap-4 text-gray-400 text-xs px-2 border-l border-white/10 ml-2">
+                <i class="fas fa-wifi text-cyan animate-pulse"></i>
+                <i class="fas fa-volume-up"></i>
+                <i class="fas fa-battery-full text-green-400"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // --- BOOT SEQUENCE LOGIC ---
+        const bootLog = document.getElementById('boot-log');
+        const bootProgress = document.getElementById('boot-progress');
+        const bootScreen = document.getElementById('boot-screen');
+        const osInterface = document.getElementById('os-interface');
+        
+        const bootMessages = [
+            "BIOS DATE 05/12/2025 15:23:01 VER 1.2.98",
+            "CPU: QUANTUM CORE i9 - 128 CORES DETECTED",
+            "MEM: 64TB RAM OK",
+            "INITIALIZING SOLVEO KERNEL...",
+            "LOADING DRIVERS: [GPU] [NET] [AI_CORE]",
+            "MOUNTING FILESYSTEMS... OK",
+            "CHECKING SECURITY PROTOCOLS... OK",
+            "CONNECTING TO NEURAL NET... ESTABLISHED",
+            "LOADING USER PROFILE: CHAMATH_ADITHYA",
+            "SYSTEM READY."
+        ];
+
+        let msgIndex = 0;
+        
+        function typeBootLog() {
+            if (msgIndex < bootMessages.length) {
+                const div = document.createElement('div');
+                div.innerText = "> " + bootMessages[msgIndex];
+                bootLog.appendChild(div);
+                bootLog.scrollTop = bootLog.scrollHeight;
+                
+                // Update Progress bar
+                const progress = ((msgIndex + 1) / bootMessages.length) * 100;
+                bootProgress.style.width = `${progress}%`;
+
+                msgIndex++;
+                setTimeout(typeBootLog, Math.random() * 300 + 100);
+            } else {
+                setTimeout(() => {
+                    bootScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        bootScreen.style.display = 'none';
+                        osInterface.style.display = 'flex';
+                        // Auto open about window on start
+                        setTimeout(() => openWindow('about-window'), 500);
+                    }, 500);
+                }, 800);
+            }
+        }
+
+        // Start Boot on Load
+        window.addEventListener('load', typeBootLog);
+
+
+        // --- WINDOW MANAGEMENT ---
+        let maxZIndex = 50;
+        
+        function openWindow(id) {
+            const win = document.getElementById(id);
+            win.classList.add('active');
+            moveToFront(id);
+            addToTaskbar(id);
+        }
+
+        function closeWindow(id) {
+            const win = document.getElementById(id);
+            win.classList.remove('active');
+            removeFromTaskbar(id);
+        }
+
+        function minimizeWindow(id) {
+            closeWindow(id); // Simple minimize behavior
+        }
+
+        function maximizeWindow(id) {
+            const win = document.getElementById(id);
+            // Toggle full screen styles if needed, for now desktop defaults are fixed size
+            if(win.style.width === "100%") {
+                win.style.width = "";
+                win.style.height = "";
+                win.style.top = "";
+                win.style.left = "";
+            } else {
+                win.style.width = "100%";
+                win.style.height = "100%";
+                win.style.top = "0";
+                win.style.left = "0";
+            }
+        }
+
+        function moveToFront(id) {
+            const win = document.getElementById(id);
+            maxZIndex++;
+            win.style.zIndex = maxZIndex;
+        }
+
+        // Draggable Logic (Desktop Only)
+        const windows = document.querySelectorAll('.os-window');
+        windows.forEach(win => {
+            const handle = win.querySelector('.drag-handle');
+            if(!handle) return;
+
+            win.addEventListener('mousedown', () => moveToFront(win.id));
+
+            let isDragging = false;
+            let startX, startY, initialLeft, initialTop;
+
+            handle.addEventListener('mousedown', (e) => {
+                // Disable drag on mobile/maximized
+                if(window.innerWidth <= 768 || win.style.width === "100%") return;
+                
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                
+                const rect = win.getBoundingClientRect();
+                initialLeft = rect.left;
+                initialTop = rect.top; // Relative to viewport since fixed/absolute
+                
+                // Switch to viewport relative positioning for simpler dragging
+                // (Note: In a full app, we'd handle offsets relative to parent container)
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                
+                // Desktop container offset (nav height)
+                // Simplified: Modify top/left styles
+                win.style.left = `${initialLeft + dx}px`;
+                win.style.top = `${initialTop + dy}px`;
+                win.style.transform = 'none'; // Remove center transform if any
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+        });
+
+        // --- TASKBAR LOGIC ---
+        function addToTaskbar(id) {
+            const container = document.getElementById('taskbar-apps');
+            const existing = document.getElementById(`task-${id}`);
+            if (existing) return;
+
+            const nameMap = {
+                'about-window': 'Profile',
+                'projects-window': 'Projects',
+                'skills-window': 'Skills',
+                'terminal-window': 'Terminal'
+            };
+
+            const btn = document.createElement('button');
+            btn.id = `task-${id}`;
+            btn.className = "px-3 py-1 bg-white/10 border-b-2 border-cyan text-gray-300 text-xs font-mono hover:bg-white/20 transition-colors flex items-center gap-2";
+            btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span> ${nameMap[id]}`;
+            btn.onclick = () => openWindow(id);
+            container.appendChild(btn);
+        }
+
+        function removeFromTaskbar(id) {
+            const btn = document.getElementById(`task-${id}`);
+            if (btn) btn.remove();
+        }
+
+
+        // --- TERMINAL LOGIC ---
+        const termInput = document.getElementById('term-input');
+        const termOutput = document.getElementById('terminal-output');
+        
+        termInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const command = this.value.trim().toLowerCase();
+                this.value = '';
+                
+                processCommand(command);
+            }
+        });
+
+        function processCommand(cmd) {
+            addToTerm(`root@solvo-os:~$ ${cmd}`, 'text-gray-400');
+            
+            switch(cmd) {
+                case 'help':
+                    addToTerm("Available commands: help, whoami, projects, contact, clear, date, reboot", 'text-cyan');
+                    break;
+                case 'whoami':
+                    addToTerm("Chamath Adithya | Founder & CTO | SOLVEO", 'text-magenta');
+                    break;
+                case 'contact':
+                    addToTerm("Email: achamath1@gmail.com", 'text-white');
+                    addToTerm("Opening mail client...", 'text-gray-500');
+                    setTimeout(() => window.location.href = "mailto:achamath1@gmail.com", 1000);
+                    break;
+                case 'projects':
+                    addToTerm("Opening Project Database...", 'text-green-400');
+                    openWindow('projects-window');
+                    break;
+                case 'clear':
+                    termOutput.innerHTML = '';
+                    break;
+                case 'date':
+                    addToTerm(new Date().toString(), 'text-white');
+                    break;
+                case 'reboot':
+                    location.reload();
+                    break;
+                case '':
+                    break;
+                default:
+                    addToTerm(`Command not found: ${cmd}`, 'text-red-500');
+            }
+            // Scroll to bottom
+            const container = document.querySelector('#terminal-window .window-content');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addToTerm(text, colorClass) {
+            const div = document.createElement('div');
+            div.className = colorClass;
+            div.textContent = text;
+            termOutput.appendChild(div);
+        }
+
+
+        // --- CLOCK & STATS ---
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
+            
+            // Random CPU fluctuation for effect
+            if(Math.random() > 0.5) {
+                document.getElementById('cpu-stat').innerText = `CPU: ${Math.floor(Math.random() * 30 + 5)}%`;
+            }
+        }
+        setInterval(updateClock, 1000);
+
+
+        // --- 3D BACKGROUND (THREE.JS) ---
+        const initThreeJS = () => {
+            const canvas = document.getElementById('bg-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Create Starfield
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsCount = 2000;
+            const posArray = new Float32Array(starsCount * 3);
+
+            for(let i = 0; i < starsCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 100;
+            }
+
+            starsGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const starsMaterial = new THREE.PointsMaterial({
+                size: 0.15,
+                color: 0x00f3ff,
+                transparent: true,
+                opacity: 0.8,
+            });
+
+            const starMesh = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(starMesh);
+
+            camera.position.z = 30;
+
+            // Animation
+            const animate = () => {
+                requestAnimationFrame(animate);
+                starMesh.rotation.y += 0.0005;
+                starMesh.rotation.x += 0.0002;
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        initThreeJS();
+
+    </script>
 </body>
 </html>

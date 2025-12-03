@@ -7,7 +7,7 @@
     <!-- SEO Meta Tags -->
     <title>Chamath Adithya | CTO & IoT Specialist | Interactive OS Portfolio</title>
     <meta name="description" content="Explore the interactive sci-fi OS portfolio of Chamath Adithya, Founder & CTO of SOLVEO. Specialist in IoT, Cybersecurity, Embedded Systems, and Full-Stack Development based in Sri Lanka.">
-    <meta name="keywords" content="Chamath Adithya, SOLVEO, CTO, IoT Specialist, Cybersecurity, Sri Lanka, Web Developer, Portfolio, Embedded Systems, React, Node.js, Arduino, ESP32">
+    <meta name="keywords" content="Chamath Adithya, SOLVEO, CTO, IoT Specialist, Cybersecurity, Sri Lanka, Web Developer, Portfolio, Embedded Systems, React, Node.js, Arduino, ESP32, Rust, Go, CyberSec">
     <meta name="author" content="Chamath Adithya">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://chamath-adithya.github.io/">
@@ -198,6 +198,12 @@
             opacity: 1;
             transform: scale(1) translateY(0);
             pointer-events: auto;
+        }
+        
+        /* Tooltip behavior for funny quotes */
+        .skill-item:hover .skill-quote {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -480,47 +486,170 @@
                 </div>
             </div>
 
-            <!-- 3. Skills Window -->
-            <div id="skills-window" class="os-window w-full md:w-[600px] h-full md:h-[500px] top-0 md:top-[20%] md:left-[30%]">
+            <!-- 3. Skills Window (EXPANDED) -->
+            <div id="skills-window" class="os-window w-full md:w-[900px] h-full md:h-[650px] top-0 md:top-[10%] md:left-[15%]">
                  <div class="h-10 md:h-8 bg-gray-900 border-b border-green-500/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
                     <div class="flex items-center gap-2 text-green-500 font-mono text-xs md:text-sm">
                         <i class="fas fa-code-branch"></i>
-                        <span>SYSTEM_CAPABILITIES :: SKILL_MATRIX</span>
+                        <span>SYSTEM_CAPABILITIES :: SKILL_MATRIX_V2.0</span>
                     </div>
                     <div class="flex gap-4 md:gap-2">
                         <button onclick="closeWindow('skills-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1"><i class="fas fa-times text-lg md:text-sm"></i></button>
                     </div>
                 </div>
                 <div class="window-content p-6 overflow-y-auto bg-black/90">
-                    <div class="space-y-6">
-                        <!-- Skill Group -->
-                        <div>
-                            <h4 class="text-cyan font-sci text-sm mb-3 border-b border-gray-700 pb-1">IoT & EMBEDDED</h4>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="bg-gray-800 p-3 rounded text-xs font-mono text-gray-300 flex justify-between items-center"><span>Arduino</span><span class="text-green-400 font-bold">98%</span></div>
-                                <div class="bg-gray-800 p-3 rounded text-xs font-mono text-gray-300 flex justify-between items-center"><span>ESP32</span><span class="text-green-400 font-bold">95%</span></div>
-                                <div class="bg-gray-800 p-3 rounded text-xs font-mono text-gray-300 flex justify-between items-center"><span>TinyML</span><span class="text-yellow-400 font-bold">85%</span></div>
-                                <div class="bg-gray-800 p-3 rounded text-xs font-mono text-gray-300 flex justify-between items-center"><span>MQTT</span><span class="text-green-400 font-bold">92%</span></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        
+                        <!-- Col 1 -->
+                        <div class="space-y-8">
+                            <!-- Languages -->
+                            <div>
+                                <h4 class="text-white font-sci text-sm mb-4 border-b border-gray-700 pb-1 flex justify-between">
+                                    <span>LANGUAGES</span>
+                                    <span class="text-gray-500 text-[10px] italic">"Syntax is optional... wait, no."</span>
+                                </h4>
+                                <div class="space-y-2">
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-cyan/30 flex justify-between items-center cursor-help">
+                                        <span class="text-cyan font-mono text-xs">JS / TypeScript</span>
+                                        <span class="text-white text-xs font-bold">98%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-cyan text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"It compiles? Ship it."</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-cyan/30 flex justify-between items-center cursor-help">
+                                        <span class="text-cyan font-mono text-xs">C / C++</span>
+                                        <span class="text-white text-xs font-bold">90%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-cyan text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"Segfaults build character."</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-cyan/30 flex justify-between items-center cursor-help">
+                                        <span class="text-cyan font-mono text-xs">Python</span>
+                                        <span class="text-white text-xs font-bold">95%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-cyan text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"import solution_to_everything"</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-cyan/30 flex justify-between items-center cursor-help">
+                                        <span class="text-cyan font-mono text-xs">Rust / Go</span>
+                                        <span class="text-white text-xs font-bold">85%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-cyan text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"Borrow checker is my therapist."</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-cyan/30 flex justify-between items-center cursor-help">
+                                        <span class="text-cyan font-mono text-xs">Java / Dart / PHP</span>
+                                        <span class="text-white text-xs font-bold">80%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-cyan text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"Enterprise grade... mostly."</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- IoT & Embedded -->
+                            <div>
+                                <h4 class="text-green-400 font-sci text-sm mb-4 border-b border-gray-700 pb-1 flex justify-between">
+                                    <span>IoT & EMBEDDED</span>
+                                    <span class="text-gray-500 text-[10px] italic">"Hardware is hard."</span>
+                                </h4>
+                                <div class="space-y-2">
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-green-400/30 flex justify-between items-center cursor-help">
+                                        <span class="text-green-400 font-mono text-xs">ESP32 / Arduino / RPi</span>
+                                        <span class="text-white text-xs font-bold">99%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-green-400 text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"I dream in GPIO pins."</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-green-400/30 flex justify-between items-center cursor-help">
+                                        <span class="text-green-400 font-mono text-xs">MQTT / FreeRTOS</span>
+                                        <span class="text-white text-xs font-bold">92%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-green-400 text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"Packet loss is just a suggestion."</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-green-400/30 flex justify-between items-center cursor-help">
+                                        <span class="text-green-400 font-mono text-xs">TinyML / Edge AI</span>
+                                        <span class="text-white text-xs font-bold">88%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-green-400 text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"Machine Learning on a potato."</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Security -->
+                            <div>
+                                <h4 class="text-red-500 font-sci text-sm mb-4 border-b border-gray-700 pb-1 flex justify-between">
+                                    <span>CYBERSECURITY</span>
+                                    <span class="text-gray-500 text-[10px] italic">"I'm in."</span>
+                                </h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair" title="The Swiss Army Knife">Kali Linux</span>
+                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair" title="I see everything">Wireshark</span>
+                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair" title="Knock knock">Nmap</span>
+                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair" title="Intercepting requests...">Burp Suite</span>
+                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair" title="Exploitation framework">Metasploit</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <h4 class="text-magenta font-sci text-sm mb-3 border-b border-gray-700 pb-1">FULL STACK & CLOUD</h4>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="bg-gray-800 p-3 rounded text-xs font-mono text-gray-300 flex justify-between items-center"><span>React/Next</span><span class="text-green-400 font-bold">90%</span></div>
-                                <div class="bg-gray-800 p-3 rounded text-xs font-mono text-gray-300 flex justify-between items-center"><span>Node.js</span><span class="text-green-400 font-bold">88%</span></div>
-                                <div class="bg-gray-800 p-3 rounded text-xs font-mono text-gray-300 flex justify-between items-center"><span>AWS</span><span class="text-yellow-400 font-bold">80%</span></div>
-                                <div class="bg-gray-800 p-3 rounded text-xs font-mono text-gray-300 flex justify-between items-center"><span>Docker</span><span class="text-green-400 font-bold">85%</span></div>
+                        <!-- Col 2 -->
+                        <div class="space-y-8">
+                            <!-- Frameworks -->
+                            <div>
+                                <h4 class="text-magenta font-sci text-sm mb-4 border-b border-gray-700 pb-1 flex justify-between">
+                                    <span>FRAMEWORKS</span>
+                                    <span class="text-gray-500 text-[10px] italic">"npm install universe"</span>
+                                </h4>
+                                <div class="space-y-2">
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-magenta/30 flex justify-between items-center cursor-help">
+                                        <span class="text-magenta font-mono text-xs">React / Next.js / Node</span>
+                                        <span class="text-white text-xs font-bold">92%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-magenta text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"Hooked on Hooks."</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-magenta/30 flex justify-between items-center cursor-help">
+                                        <span class="text-magenta font-mono text-xs">Electron / Flutter</span>
+                                        <span class="text-white text-xs font-bold">85%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-magenta text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"Cross-platform magic."</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-magenta/30 flex justify-between items-center cursor-help">
+                                        <span class="text-magenta font-mono text-xs">FastAPI / Express</span>
+                                        <span class="text-white text-xs font-bold">90%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-magenta text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"RESTful nights."</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cloud & Ops -->
+                            <div>
+                                <h4 class="text-blue-400 font-sci text-sm mb-4 border-b border-gray-700 pb-1 flex justify-between">
+                                    <span>CLOUD & DEVOPS</span>
+                                    <span class="text-gray-500 text-[10px] italic">"There is no cloud, just others' computers"</span>
+                                </h4>
+                                <div class="space-y-2">
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-blue-400/30 flex justify-between items-center cursor-help">
+                                        <span class="text-blue-400 font-mono text-xs">Docker / K8s</span>
+                                        <span class="text-white text-xs font-bold">88%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-blue-400 text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"It works on my machine... now yours too."</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-blue-400/30 flex justify-between items-center cursor-help">
+                                        <span class="text-blue-400 font-mono text-xs">AWS / Firebase</span>
+                                        <span class="text-white text-xs font-bold">85%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-blue-400 text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"Serverless billing anxiety."</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-blue-400/30 flex justify-between items-center cursor-help">
+                                        <span class="text-blue-400 font-mono text-xs">Linux (Arch/Ubuntu)</span>
+                                        <span class="text-white text-xs font-bold">99%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-blue-400 text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"sudo make me a sandwich."</div>
+                                    </div>
+                                    <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-blue-400/30 flex justify-between items-center cursor-help">
+                                        <span class="text-blue-400 font-mono text-xs">Terraform / Ansible</span>
+                                        <span class="text-white text-xs font-bold">80%</span>
+                                        <div class="skill-quote absolute -top-8 left-0 bg-blue-400 text-black text-[10px] px-2 py-1 rounded font-bold opacity-0 transition-opacity pointer-events-none w-max z-10">"Infrastructure as Code (and bugs)."</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Databases -->
+                            <div>
+                                <h4 class="text-yellow-400 font-sci text-sm mb-4 border-b border-gray-700 pb-1 flex justify-between">
+                                    <span>DATA CORE</span>
+                                    <span class="text-gray-500 text-[10px] italic">"SELECT * FROM life"</span>
+                                </h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded">PostgreSQL</span>
+                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded">MongoDB</span>
+                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded">Redis</span>
+                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded">DuckDB</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <h4 class="text-red-400 font-sci text-sm mb-3 border-b border-gray-700 pb-1">SECURITY & OPS</h4>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="bg-gray-800 p-3 rounded text-xs font-mono text-gray-300 flex justify-between items-center"><span>PenTesting</span><span class="text-yellow-400 font-bold">85%</span></div>
-                                <div class="bg-gray-800 p-3 rounded text-xs font-mono text-gray-300 flex justify-between items-center"><span>Linux</span><span class="text-green-400 font-bold">95%</span></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -838,9 +967,10 @@
                     break;
                 case 'skills':
                     addToTerm("Listing System Capabilities...", 'text-green-400');
-                    addToTerm("- IoT & Embedded (98%)", 'text-gray-300');
-                    addToTerm("- Full Stack & Cloud (90%)", 'text-gray-300');
-                    addToTerm("- Cybersecurity (85%)", 'text-gray-300');
+                    addToTerm("LANGUAGES: JS, TS, C++, Rust, Go, Python, PHP, Dart", 'text-gray-300');
+                    addToTerm("HARDWARE: ESP32, Arduino, Raspberry Pi, MQTT", 'text-gray-300');
+                    addToTerm("CLOUD: AWS, Docker, K8s, Firebase, Terraform", 'text-gray-300');
+                    addToTerm("SECURITY: Kali, Metasploit, Wireshark, Burp", 'text-gray-300');
                     break;
                  case 'socials':
                     addToTerm("GitHub: https://github.com/Chamath-Adithya", 'text-blue-300');

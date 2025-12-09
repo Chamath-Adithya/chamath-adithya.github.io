@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
+
     <!-- SEO Meta Tags -->
     <title>Chamath Adithya | CTO & IoT Specialist | Interactive OS Portfolio</title>
     <meta name="description" content="Explore the interactive sci-fi OS portfolio of Chamath Adithya, Founder & CTO of SOLVEO. Specialist in IoT, Cybersecurity, Embedded Systems, and Full-Stack Development based in Sri Lanka.">
@@ -25,15 +25,47 @@
     <meta property="twitter:title" content="Chamath Adithya | CTO & IoT Specialist">
     <meta property="twitter:description" content="Interactive Sci-Fi OS Portfolio. specialized in IoT Security and Full Stack Development.">
     <meta property="twitter:image" content="https://avatars.githubusercontent.com/u/159120632?s=400&v=4">
-    
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Chamath Adithya",
+      "url": "https://chamath-adithya.github.io/",
+      "image": "https://avatars.githubusercontent.com/u/159120632?s=400&v=4",
+      "jobTitle": "CTO & IoT Specialist",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "SOLVEO"
+      },
+      "sameAs": [
+        "https://github.com/Chamath-Adithya",
+        "https://www.linkedin.com/in/chamath-adithya-senanayaka-90264936b/"
+      ],
+      "knowsAbout": ["IoT", "Cybersecurity", "Embedded Systems", "Full-Stack Development", "React", "Node.js", "Arduino", "ESP32", "Rust", "Go"],
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "Sri Lanka"
+      },
+      "email": "mailto:achamath1@gmail.com"
+    }
+    </script>
+
+    <!-- Preconnect to CDNs -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <script src="https://cdn.tailwindcss.com" defer></script>
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
@@ -138,7 +170,7 @@
             transform: scale(1);
             z-index: 50;
         }
-        
+
         /* Mobile Specifics */
         @media (max-width: 768px) {
             .os-window.active {
@@ -163,7 +195,7 @@
                 padding-top: 1rem;
                 padding-bottom: 1rem;
             }
-            
+
             /* Start Menu Mobile */
             #start-menu {
                 width: 90% !important;
@@ -212,7 +244,7 @@
             transform: scale(1) translateY(0);
             pointer-events: auto;
         }
-        
+
         /* Tooltip behavior for funny quotes */
         .skill-item:hover .skill-quote {
             opacity: 1;
@@ -224,7 +256,7 @@
 
     <!-- 3D Background -->
     <canvas id="bg-canvas" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
-    
+
     <!-- Scanlines -->
     <div class="scanlines"></div>
 
@@ -242,12 +274,12 @@
     </div>
 
     <!-- Main OS Interface -->
-    <div id="os-interface" class="fixed inset-0 hidden flex-col">
-        
+    <main id="os-interface" class="fixed inset-0 hidden flex-col">
+
         <!-- Top Bar (System Stats) -->
-        <div class="h-8 bg-black/80 backdrop-blur border-b border-white/10 flex items-center justify-between px-4 text-xs font-mono text-cyan select-none z-40">
+        <header class="h-8 bg-black/80 backdrop-blur border-b border-white/10 flex items-center justify-between px-4 text-xs font-mono text-cyan select-none z-40">
             <div class="flex items-center gap-4">
-                <span class="font-bold tracking-wider text-white"><i class="fas fa-satellite-dish text-magenta mr-2"></i>CA-OS v2.0</span>
+                <span class="font-bold tracking-wider text-white"><i class="fas fa-satellite-dish text-magenta mr-2" aria-hidden="true"></i>CA-OS v2.0</span>
                 <span class="hidden md:inline text-gray-600">|</span>
                 <span class="hidden md:inline text-gray-400" id="cpu-stat">CPU: 12%</span>
                 <span class="hidden md:inline text-gray-600">|</span>
@@ -257,109 +289,109 @@
                 <span id="location-stat" class="hidden sm:inline text-gray-400">LOC: SRI LANKA</span>
                 <span id="clock" class="text-white font-bold bg-white/10 px-2 py-0.5 rounded">00:00:00</span>
             </div>
-        </div>
+        </header>
 
         <!-- Desktop Area -->
-        <div class="flex-grow relative p-4 md:p-8" id="desktop-area">
-            
+        <section class="flex-grow relative p-4 md:p-8" id="desktop-area">
+
             <!-- Desktop Icons Grid -->
             <div class="grid desktop-icon-grid w-full md:w-auto md:grid-cols-1 md:absolute md:top-8 md:left-8 gap-8">
-                
+
                 <!-- About Icon -->
-                <button onclick="openWindow('about-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95">
+                <button onclick="openWindow('about-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95" aria-label="Open Profile">
                     <div class="w-16 h-16 md:w-14 md:h-14 rounded-xl bg-black/60 border border-cyan/50 flex items-center justify-center group-hover:shadow-[0_0_20px_#00f3ff] group-hover:border-cyan transition-all relative overflow-hidden backdrop-blur-sm">
                         <div class="absolute inset-0 bg-cyan/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
-                        <i class="fas fa-user-astronaut text-3xl md:text-2xl text-cyan group-hover:scale-110 transition-transform"></i>
+                        <i class="fas fa-user-astronaut text-3xl md:text-2xl text-cyan group-hover:scale-110 transition-transform" aria-hidden="true"></i>
                     </div>
                     <span class="text-xs font-mono bg-black/70 px-2 py-1 rounded text-shadow text-cyan border border-cyan/20">Profile.exe</span>
                 </button>
 
                 <!-- Projects Icon -->
-                <button onclick="openWindow('projects-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95">
+                <button onclick="openWindow('projects-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95" aria-label="Open Projects">
                     <div class="w-16 h-16 md:w-14 md:h-14 rounded-xl bg-black/60 border border-magenta/50 flex items-center justify-center group-hover:shadow-[0_0_20px_#ff00aa] group-hover:border-magenta transition-all relative overflow-hidden backdrop-blur-sm">
                         <div class="absolute inset-0 bg-magenta/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
-                        <i class="fas fa-folder-open text-3xl md:text-2xl text-magenta group-hover:scale-110 transition-transform"></i>
+                        <i class="fas fa-folder-open text-3xl md:text-2xl text-magenta group-hover:scale-110 transition-transform" aria-hidden="true"></i>
                     </div>
                     <span class="text-xs font-mono bg-black/70 px-2 py-1 rounded text-shadow text-magenta border border-magenta/20">Projects_DB</span>
                 </button>
 
                 <!-- Skills Icon -->
-                <button onclick="openWindow('skills-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95">
+                <button onclick="openWindow('skills-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95" aria-label="Open Skills">
                     <div class="w-16 h-16 md:w-14 md:h-14 rounded-xl bg-black/60 border border-green-500/50 flex items-center justify-center group-hover:shadow-[0_0_20px_#00ff00] group-hover:border-green-500 transition-all relative overflow-hidden backdrop-blur-sm">
                          <div class="absolute inset-0 bg-green-500/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
-                        <i class="fas fa-microchip text-3xl md:text-2xl text-green-500 group-hover:scale-110 transition-transform"></i>
+                        <i class="fas fa-microchip text-3xl md:text-2xl text-green-500 group-hover:scale-110 transition-transform" aria-hidden="true"></i>
                     </div>
                     <span class="text-xs font-mono bg-black/70 px-2 py-1 rounded text-shadow text-green-400 border border-green-500/20">Skills.sys</span>
                 </button>
 
                 <!-- Terminal Icon -->
-                <button onclick="openWindow('terminal-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95">
+                <button onclick="openWindow('terminal-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95" aria-label="Open Terminal">
                     <div class="w-16 h-16 md:w-14 md:h-14 rounded-xl bg-black/60 border border-white/30 flex items-center justify-center group-hover:shadow-[0_0_20px_#ffffff] group-hover:border-white transition-all relative overflow-hidden backdrop-blur-sm">
                          <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
-                        <i class="fas fa-terminal text-3xl md:text-2xl text-gray-300 group-hover:scale-110 transition-transform"></i>
+                        <i class="fas fa-terminal text-3xl md:text-2xl text-gray-300 group-hover:scale-110 transition-transform" aria-hidden="true"></i>
                     </div>
                     <span class="text-xs font-mono bg-black/70 px-2 py-1 rounded text-shadow text-white border border-white/20">Terminal</span>
                 </button>
             </div>
 
             <!-- START MENU (Hidden by default) -->
-            <div id="start-menu" class="hidden-menu absolute bottom-2 left-2 w-72 bg-black/90 border border-cyan/40 backdrop-blur-xl rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,243,255,0.2)] z-[60] flex flex-col">
+            <nav id="start-menu" class="hidden-menu absolute bottom-2 left-2 w-72 bg-black/90 border border-cyan/40 backdrop-blur-xl rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,243,255,0.2)] z-[60] flex flex-col" aria-label="Start Menu">
                 <!-- Header -->
                 <div class="bg-gradient-to-r from-cyan/20 to-magenta/20 p-4 border-b border-white/10 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full border border-white/50 overflow-hidden">
-                        <img src="https://avatars.githubusercontent.com/u/159120632?s=400&u=68fd0384ac76119a0b4d744a0f621af74109a422&v=4" class="w-full h-full object-cover">
+                        <img src="https://avatars.githubusercontent.com/u/159120632?s=400&u=68fd0384ac76119a0b4d744a0f621af74109a422&v=4" class="w-full h-full object-cover" alt="User Avatar">
                     </div>
                     <div>
                         <div class="font-sci text-white font-bold">CHAMATH ADITHYA</div>
                         <div class="text-[10px] font-mono text-cyan">SYSTEM ADMINISTRATOR</div>
                     </div>
                 </div>
-                
+
                 <!-- Menu Items -->
                 <div class="p-2 space-y-1">
-                    <button onclick="openWindow('about-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-cyan transition-colors">
-                        <i class="fas fa-user w-5 text-center"></i> Profile
+                    <button onclick="openWindow('about-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-cyan transition-colors" aria-label="Open Profile">
+                        <i class="fas fa-user w-5 text-center" aria-hidden="true"></i> Profile
                     </button>
-                    <button onclick="openWindow('projects-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-magenta transition-colors">
-                        <i class="fas fa-folder-open w-5 text-center"></i> Projects
+                    <button onclick="openWindow('projects-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-magenta transition-colors" aria-label="Open Projects">
+                        <i class="fas fa-folder-open w-5 text-center" aria-hidden="true"></i> Projects
                     </button>
-                    <button onclick="openWindow('skills-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-green-400 transition-colors">
-                        <i class="fas fa-microchip w-5 text-center"></i> Skills Matrix
+                    <button onclick="openWindow('skills-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-green-400 transition-colors" aria-label="Open Skills Matrix">
+                        <i class="fas fa-microchip w-5 text-center" aria-hidden="true"></i> Skills Matrix
                     </button>
-                    <button onclick="openWindow('terminal-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-white transition-colors">
-                        <i class="fas fa-terminal w-5 text-center"></i> Terminal
+                    <button onclick="openWindow('terminal-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-white transition-colors" aria-label="Open Terminal">
+                        <i class="fas fa-terminal w-5 text-center" aria-hidden="true"></i> Terminal
                     </button>
                     <div class="h-px bg-white/10 my-1"></div>
-                    <a href="mailto:achamath1@gmail.com" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-yellow-400 transition-colors">
-                        <i class="fas fa-envelope w-5 text-center"></i> Contact
+                    <a href="mailto:achamath1@gmail.com" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-yellow-400 transition-colors" aria-label="Contact Email">
+                        <i class="fas fa-envelope w-5 text-center" aria-hidden="true"></i> Contact
                     </a>
                 </div>
 
                 <!-- Footer -->
-                <div class="bg-black/50 p-3 border-t border-white/10 flex justify-between items-center">
-                    <button onclick="location.reload()" class="text-red-400 hover:text-red-300 text-xs flex items-center gap-2 px-2 py-1 rounded hover:bg-white/5 transition-colors">
-                        <i class="fas fa-power-off"></i> REBOOT SYSTEM
+                <footer class="bg-black/50 p-3 border-t border-white/10 flex justify-between items-center">
+                    <button onclick="location.reload()" class="text-red-400 hover:text-red-300 text-xs flex items-center gap-2 px-2 py-1 rounded hover:bg-white/5 transition-colors" aria-label="Reboot System">
+                        <i class="fas fa-power-off" aria-hidden="true"></i> REBOOT SYSTEM
                     </button>
                     <span class="text-[10px] text-gray-600 font-mono">CA-OS v2.0</span>
-                </div>
-            </div>
+                </footer>
+            </nav>
 
             <!-- WINDOWS -->
 
             <!-- 1. Profile Window -->
-            <div id="about-window" class="os-window w-full md:w-[800px] h-full md:h-[500px] top-0 md:top-[10%] md:left-[20%]">
+            <article id="about-window" class="os-window w-full md:w-[800px] h-full md:h-[500px] top-0 md:top-[10%] md:left-[20%]" aria-labelledby="profile-heading">
                 <!-- Header -->
-                <div class="h-10 md:h-8 bg-gray-900 border-b border-cyan/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
+                <header class="h-10 md:h-8 bg-gray-900 border-b border-cyan/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
                     <div class="flex items-center gap-2 text-cyan font-mono text-xs md:text-sm">
-                        <i class="fas fa-user-circle animate-pulse"></i>
-                        <span class="tracking-wider">USER_PROFILE :: CHAMATH</span>
+                        <i class="fas fa-user-circle animate-pulse" aria-hidden="true"></i>
+                        <span class="tracking-wider" id="profile-heading">USER_PROFILE :: CHAMATH</span>
                     </div>
                     <div class="flex gap-4 md:gap-2 window-controls">
-                        <button onclick="minimizeWindow('about-window')" class="hover:text-white text-gray-500 p-1"><i class="fas fa-minus"></i></button>
-                        <button onclick="maximizeWindow('about-window')" class="hover:text-white text-gray-500 hidden md:block p-1"><i class="fas fa-expand"></i></button>
-                        <button onclick="closeWindow('about-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1"><i class="fas fa-times text-lg md:text-sm"></i></button>
+                        <button onclick="minimizeWindow('about-window')" class="hover:text-white text-gray-500 p-1" aria-label="Minimize Profile"><i class="fas fa-minus" aria-hidden="true"></i></button>
+                        <button onclick="maximizeWindow('about-window')" class="hover:text-white text-gray-500 hidden md:block p-1" aria-label="Maximize Profile"><i class="fas fa-expand" aria-hidden="true"></i></button>
+                        <button onclick="closeWindow('about-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1" aria-label="Close Profile"><i class="fas fa-times text-lg md:text-sm" aria-hidden="true"></i></button>
                     </div>
-                </div>
+                </header>
                 <!-- Content -->
                 <div class="window-content flex-grow overflow-y-auto p-6 bg-black/40 text-gray-300">
                     <div class="flex flex-col md:flex-row gap-8">
@@ -368,15 +400,15 @@
                             <div class="relative w-48 h-48 mb-6 group">
                                 <div class="absolute inset-0 border-2 border-cyan rounded-full animate-spin-slow border-dashed"></div>
                                 <div class="absolute inset-2 border border-magenta rounded-full"></div>
-                                <img src="https://avatars.githubusercontent.com/u/159120632?s=400&u=68fd0384ac76119a0b4d744a0f621af74109a422&v=4" alt="Chamath" class="w-full h-full rounded-full object-cover p-4 opacity-90 group-hover:opacity-100 transition-opacity">
+                                <img src="https://avatars.githubusercontent.com/u/159120632?s=400&u=68fd0384ac76119a0b4d744a0f621af74109a422&v=4" alt="Chamath Adithya" class="w-full h-full rounded-full object-cover p-4 opacity-90 group-hover:opacity-100 transition-opacity">
                             </div>
                             <div class="text-center w-full">
                                 <h1 class="text-2xl font-sci text-white mb-1 tracking-widest">CHAMATH ADITHYA</h1>
                                 <p class="text-cyan font-mono text-sm mb-4">FOUNDER & CTO @ SOLVEO</p>
                                 <div class="flex justify-center gap-6 text-2xl">
-                                    <a href="https://github.com/Chamath-Adithya" target="_blank" aria-label="GitHub" class="text-gray-400 hover:text-white hover:scale-125 transition-transform"><i class="fab fa-github"></i></a>
-                                    <a href="https://www.linkedin.com/in/chamath-adithya-senanayaka-90264936b/" target="_blank" aria-label="LinkedIn" class="text-gray-400 hover:text-blue-400 hover:scale-125 transition-transform"><i class="fab fa-linkedin"></i></a>
-                                    <a href="mailto:achamath1@gmail.com" aria-label="Email" class="text-gray-400 hover:text-red-400 hover:scale-125 transition-transform"><i class="fas fa-envelope"></i></a>
+                                    <a href="https://github.com/Chamath-Adithya" target="_blank" aria-label="GitHub Profile" class="text-gray-400 hover:text-white hover:scale-125 transition-transform"><i class="fab fa-github" aria-hidden="true"></i></a>
+                                    <a href="https://www.linkedin.com/in/chamath-adithya-senanayaka-90264936b/" target="_blank" aria-label="LinkedIn Profile" class="text-gray-400 hover:text-blue-400 hover:scale-125 transition-transform"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+                                    <a href="mailto:achamath1@gmail.com" aria-label="Send Email" class="text-gray-400 hover:text-red-400 hover:scale-125 transition-transform"><i class="fas fa-envelope" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -386,19 +418,19 @@
                                 <h2 class="font-sci text-cyan mb-2 text-xl tracking-wider">MISSION STATUS</h2>
                                 <p>Merging software, <span class="text-white font-bold">IoT</span>, <span class="text-white font-bold">Cybersecurity</span>, and <span class="text-white font-bold">Automation</span> to build next-generation secure frameworks.</p>
                             </div>
-                            
+
                             <h3 class="font-mono text-magenta mb-4 border-b border-white/10 pb-2">> BIO_DATA_LOG</h3>
                             <ul class="space-y-3 font-mono text-sm">
                                 <li class="flex items-start gap-3">
-                                    <i class="fas fa-map-marker-alt text-cyan mt-1"></i>
+                                    <i class="fas fa-map-marker-alt text-cyan mt-1" aria-hidden="true"></i>
                                     <span>Based in <strong class="text-white">Sri Lanka</strong>. Architecting enterprise IoT security.</span>
                                 </li>
                                 <li class="flex items-start gap-3">
-                                    <i class="fas fa-brain text-cyan mt-1"></i>
+                                    <i class="fas fa-brain text-cyan mt-1" aria-hidden="true"></i>
                                     <span>Passionate about <strong class="text-white">TinyML</strong>, Edge AI, and System Architecture.</span>
                                 </li>
                                 <li class="flex items-start gap-3">
-                                    <i class="fas fa-chess text-cyan mt-1"></i>
+                                    <i class="fas fa-chess text-cyan mt-1" aria-hidden="true"></i>
                                     <span>Strategic Thinker: Chess player & complex problem solver.</span>
                                 </li>
                             </ul>
@@ -410,34 +442,34 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </article>
 
             <!-- 2. Projects Window -->
-            <div id="projects-window" class="os-window w-full md:w-[900px] h-full md:h-[600px] top-0 md:top-[15%] md:left-[15%]">
-                <div class="h-10 md:h-8 bg-gray-900 border-b border-magenta/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
+            <section id="projects-window" class="os-window w-full md:w-[900px] h-full md:h-[600px] top-0 md:top-[15%] md:left-[15%]" aria-labelledby="projects-heading">
+                <header class="h-10 md:h-8 bg-gray-900 border-b border-magenta/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
                     <div class="flex items-center gap-2 text-magenta font-mono text-xs md:text-sm">
-                        <i class="fas fa-folder-tree"></i>
-                        <span>PROJECT_DB :: REPOSITORY_ACCESS</span>
+                        <i class="fas fa-folder-tree" aria-hidden="true"></i>
+                        <span id="projects-heading">PROJECT_DB :: REPOSITORY_ACCESS</span>
                     </div>
                     <div class="flex gap-4 md:gap-2 window-controls">
-                        <button onclick="closeWindow('projects-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1"><i class="fas fa-times text-lg md:text-sm"></i></button>
+                        <button onclick="closeWindow('projects-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1" aria-label="Close Projects"><i class="fas fa-times text-lg md:text-sm" aria-hidden="true"></i></button>
                     </div>
-                </div>
+                </header>
                 <!-- File Explorer Style Content -->
                 <div class="window-content flex-grow flex flex-col md:flex-row bg-black/80">
                     <!-- Sidebar -->
-                    <div class="w-full md:w-48 bg-gray-900/50 border-r border-white/5 p-4 hidden md:block">
+                    <nav class="w-full md:w-48 bg-gray-900/50 border-r border-white/5 p-4 hidden md:block">
                         <div class="text-xs font-mono text-gray-500 mb-2">DIRECTORY</div>
                         <ul class="space-y-2 text-sm font-mono text-cyan">
-                            <li class="cursor-pointer hover:bg-white/5 p-1 rounded"><i class="fas fa-hdd mr-2"></i> root</li>
-                            <li class="cursor-pointer hover:bg-white/5 p-1 rounded pl-4 text-white font-bold"><i class="fas fa-folder-open mr-2 text-magenta"></i> projects</li>
-                            <li class="cursor-pointer hover:bg-white/5 p-1 rounded pl-8 text-gray-400"><i class="fab fa-github mr-2"></i> archived</li>
+                            <li class="cursor-pointer hover:bg-white/5 p-1 rounded"><i class="fas fa-hdd mr-2" aria-hidden="true"></i> root</li>
+                            <li class="cursor-pointer hover:bg-white/5 p-1 rounded pl-4 text-white font-bold"><i class="fas fa-folder-open mr-2 text-magenta" aria-hidden="true"></i> projects</li>
+                            <li class="cursor-pointer hover:bg-white/5 p-1 rounded pl-8 text-gray-400"><i class="fab fa-github mr-2" aria-hidden="true"></i> archived</li>
                         </ul>
-                    </div>
+                    </nav>
                     <!-- Grid -->
                     <div class="flex-grow p-4 md:p-6 overflow-y-auto">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            
+
                             <!-- Card 1 -->
                             <div class="border border-white/10 bg-white/5 p-4 hover:border-magenta/50 hover:bg-white/10 transition-all group rounded">
                                 <div class="flex justify-between items-start mb-2">
@@ -447,8 +479,8 @@
                                 <p class="text-xs text-gray-400 mb-4 font-mono leading-relaxed">
                                     ESP32 Arduino library for BLE WiFi provisioning, EEPROM storage, and sensor data transmission.
                                 </p>
-                                <a href="https://github.com/Chamath-Adithya/GoofyBLEProvisioning" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1 p-2 bg-black/30 rounded w-max">
-                                    ACCESS_CODE <i class="fas fa-external-link-alt"></i>
+                                <a href="https://github.com/Chamath-Adithya/GoofyBLEProvisioning" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1 p-2 bg-black/30 rounded w-max" aria-label="View GoofyBLEProvisioning Code">
+                                    ACCESS_CODE <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                                 </a>
                             </div>
 
@@ -461,8 +493,8 @@
                                 <p class="text-xs text-gray-400 mb-4 font-mono leading-relaxed">
                                     Specialized audit man-day calculator using TypeScript for precise project estimation.
                                 </p>
-                                <a href="https://github.com/Chamath-Adithya/Dayora-Audit-Man-Day-Calculator" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1 p-2 bg-black/30 rounded w-max">
-                                    ACCESS_CODE <i class="fas fa-external-link-alt"></i>
+                                <a href="https://github.com/Chamath-Adithya/Dayora-Audit-Man-Day-Calculator" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1 p-2 bg-black/30 rounded w-max" aria-label="View Dayora Man-Day Calc Code">
+                                    ACCESS_CODE <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                                 </a>
                             </div>
 
@@ -475,8 +507,8 @@
                                 <p class="text-xs text-gray-400 mb-4 font-mono leading-relaxed">
                                     Embedded C++ project for Arduino to detect and analyze water quality metrics in real-time.
                                 </p>
-                                <a href="https://github.com/Chamath-Adithya/Arduino_Water_Cuality_Detector" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1 p-2 bg-black/30 rounded w-max">
-                                    ACCESS_CODE <i class="fas fa-external-link-alt"></i>
+                                <a href="https://github.com/Chamath-Adithya/Arduino_Water_Cuality_Detector" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1 p-2 bg-black/30 rounded w-max" aria-label="View Water Quality Detector Code">
+                                    ACCESS_CODE <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                                 </a>
                             </div>
 
@@ -489,30 +521,30 @@
                                 <p class="text-xs text-gray-400 mb-4 font-mono leading-relaxed">
                                     Implementation and interface code for HX711 load cell amplifiers/sensors.
                                 </p>
-                                <a href="https://github.com/Chamath-Adithya/HX711-Pleasure_Sensor" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1 p-2 bg-black/30 rounded w-max">
-                                    ACCESS_CODE <i class="fas fa-external-link-alt"></i>
+                                <a href="https://github.com/Chamath-Adithya/HX711-Pleasure_Sensor" target="_blank" class="text-xs text-cyan hover:underline flex items-center gap-1 p-2 bg-black/30 rounded w-max" aria-label="View HX711 Sensor Lib Code">
+                                    ACCESS_CODE <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                                 </a>
                             </div>
 
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- 3. Skills Window (EXPANDED) -->
-            <div id="skills-window" class="os-window w-full md:w-[900px] h-full md:h-[650px] top-0 md:top-[10%] md:left-[15%]">
-                 <div class="h-10 md:h-8 bg-gray-900 border-b border-green-500/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
+            <section id="skills-window" class="os-window w-full md:w-[900px] h-full md:h-[650px] top-0 md:top-[10%] md:left-[15%]" aria-labelledby="skills-heading">
+                 <header class="h-10 md:h-8 bg-gray-900 border-b border-green-500/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
                     <div class="flex items-center gap-2 text-green-500 font-mono text-xs md:text-sm">
-                        <i class="fas fa-code-branch"></i>
-                        <span>SYSTEM_CAPABILITIES :: SKILL_MATRIX_V2.0</span>
+                        <i class="fas fa-code-branch" aria-hidden="true"></i>
+                        <span id="skills-heading">SYSTEM_CAPABILITIES :: SKILL_MATRIX_V2.0</span>
                     </div>
                     <div class="flex gap-4 md:gap-2 window-controls">
-                        <button onclick="closeWindow('skills-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1"><i class="fas fa-times text-lg md:text-sm"></i></button>
+                        <button onclick="closeWindow('skills-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1" aria-label="Close Skills"><i class="fas fa-times text-lg md:text-sm" aria-hidden="true"></i></button>
                     </div>
-                </div>
+                </header>
                 <div class="window-content p-6 overflow-y-auto bg-black/90">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        
+
                         <!-- Col 1 -->
                         <div class="space-y-8">
                             <!-- Languages -->
@@ -524,7 +556,7 @@
                                 <div class="space-y-2">
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-cyan/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fab fa-js text-yellow-400 mr-2 text-lg"></i>
+                                            <i class="fab fa-js text-yellow-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-cyan font-mono text-xs">JS / TypeScript</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">98%</span>
@@ -532,7 +564,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-cyan/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fas fa-microchip text-blue-400 mr-2 text-lg"></i>
+                                            <i class="fas fa-microchip text-blue-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-cyan font-mono text-xs">C / C++</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">90%</span>
@@ -540,7 +572,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-cyan/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fab fa-python text-blue-300 mr-2 text-lg"></i>
+                                            <i class="fab fa-python text-blue-300 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-cyan font-mono text-xs">Python</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">95%</span>
@@ -548,7 +580,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-cyan/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fab fa-rust text-orange-400 mr-2 text-lg"></i>
+                                            <i class="fab fa-rust text-orange-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-cyan font-mono text-xs">Rust / Go</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">85%</span>
@@ -556,7 +588,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-cyan/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fab fa-java text-red-400 mr-2 text-lg"></i>
+                                            <i class="fab fa-java text-red-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-cyan font-mono text-xs">Java / Dart / PHP</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">80%</span>
@@ -574,7 +606,7 @@
                                 <div class="space-y-2">
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-green-400/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fas fa-microchip text-green-400 mr-2 text-lg"></i>
+                                            <i class="fas fa-microchip text-green-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-green-400 font-mono text-xs">ESP32 / Arduino / RPi</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">99%</span>
@@ -582,7 +614,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-green-400/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fas fa-network-wired text-green-400 mr-2 text-lg"></i>
+                                            <i class="fas fa-network-wired text-green-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-green-400 font-mono text-xs">MQTT / FreeRTOS</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">92%</span>
@@ -590,7 +622,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-green-400/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fas fa-brain text-green-400 mr-2 text-lg"></i>
+                                            <i class="fas fa-brain text-green-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-green-400 font-mono text-xs">TinyML / Edge AI</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">88%</span>
@@ -598,7 +630,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Security -->
                             <div>
                                 <h4 class="text-red-500 font-sci text-sm mb-4 border-b border-gray-700 pb-1 flex justify-between">
@@ -606,11 +638,11 @@
                                     <span class="text-gray-500 text-[10px] italic">"I'm in."</span>
                                 </h4>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair flex items-center" title="The Swiss Army Knife"><i class="fab fa-linux mr-1"></i> Kali Linux</span>
-                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair flex items-center" title="I see everything"><i class="fas fa-wave-square mr-1"></i> Wireshark</span>
-                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair flex items-center" title="Knock knock"><i class="fas fa-eye mr-1"></i> Nmap</span>
-                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair flex items-center" title="Intercepting requests..."><i class="fas fa-bug mr-1"></i> Burp Suite</span>
-                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair flex items-center" title="Exploitation framework"><i class="fas fa-bomb mr-1"></i> Metasploit</span>
+                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair flex items-center" title="The Swiss Army Knife"><i class="fab fa-linux mr-1" aria-hidden="true"></i> Kali Linux</span>
+                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair flex items-center" title="I see everything"><i class="fas fa-wave-square mr-1" aria-hidden="true"></i> Wireshark</span>
+                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair flex items-center" title="Knock knock"><i class="fas fa-eye mr-1" aria-hidden="true"></i> Nmap</span>
+                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair flex items-center" title="Intercepting requests..."><i class="fas fa-bug mr-1" aria-hidden="true"></i> Burp Suite</span>
+                                    <span class="px-2 py-1 bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-mono rounded hover:bg-red-500 hover:text-black transition-colors cursor-crosshair flex items-center" title="Exploitation framework"><i class="fas fa-bomb mr-1" aria-hidden="true"></i> Metasploit</span>
                                 </div>
                             </div>
                         </div>
@@ -626,7 +658,7 @@
                                 <div class="space-y-2">
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-magenta/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fab fa-react text-cyan mr-2 text-lg"></i>
+                                            <i class="fab fa-react text-cyan mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-magenta font-mono text-xs">React / Next.js / Node</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">92%</span>
@@ -634,7 +666,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-magenta/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fab fa-android text-cyan mr-2 text-lg"></i>
+                                            <i class="fab fa-android text-cyan mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-magenta font-mono text-xs">Electron / Flutter</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">85%</span>
@@ -642,7 +674,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-magenta/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fas fa-bolt text-cyan mr-2 text-lg"></i>
+                                            <i class="fas fa-bolt text-cyan mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-magenta font-mono text-xs">FastAPI / Express</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">90%</span>
@@ -660,7 +692,7 @@
                                 <div class="space-y-2">
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-blue-400/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fab fa-docker text-blue-400 mr-2 text-lg"></i>
+                                            <i class="fab fa-docker text-blue-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-blue-400 font-mono text-xs">Docker / K8s</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">88%</span>
@@ -668,7 +700,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-blue-400/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fab fa-aws text-orange-400 mr-2 text-lg"></i>
+                                            <i class="fab fa-aws text-orange-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-blue-400 font-mono text-xs">AWS / Firebase</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">85%</span>
@@ -676,7 +708,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-blue-400/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fab fa-linux text-yellow-200 mr-2 text-lg"></i>
+                                            <i class="fab fa-linux text-yellow-200 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-blue-400 font-mono text-xs">Linux (Arch/Ubuntu)</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">99%</span>
@@ -684,7 +716,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-blue-400/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fas fa-code-branch text-blue-400 mr-2 text-lg"></i>
+                                            <i class="fas fa-code-branch text-blue-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-blue-400 font-mono text-xs">Terraform / Ansible</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">80%</span>
@@ -700,34 +732,34 @@
                                     <span class="text-gray-500 text-[10px] italic">"SELECT * FROM life"</span>
                                 </h4>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded flex items-center"><i class="fas fa-database mr-1"></i> PostgreSQL</span>
-                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded flex items-center"><i class="fas fa-leaf mr-1"></i> MongoDB</span>
-                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded flex items-center"><i class="fas fa-memory mr-1"></i> Redis</span>
-                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded flex items-center"><i class="fas fa-server mr-1"></i> DuckDB</span>
+                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded flex items-center"><i class="fas fa-database mr-1" aria-hidden="true"></i> PostgreSQL</span>
+                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded flex items-center"><i class="fas fa-leaf mr-1" aria-hidden="true"></i> MongoDB</span>
+                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded flex items-center"><i class="fas fa-memory mr-1" aria-hidden="true"></i> Redis</span>
+                                    <span class="px-2 py-1 bg-yellow-900/30 border border-yellow-400/30 text-yellow-400 text-[10px] font-mono rounded flex items-center"><i class="fas fa-server mr-1" aria-hidden="true"></i> DuckDB</span>
                                 </div>
                             </div>
                         </div>
 
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- 4. Terminal Window -->
             <div id="terminal-window" class="os-window w-full md:w-[600px] h-full md:h-[400px] top-0 md:top-[25%] md:left-[25%] border-gray-500">
-                <div class="h-10 md:h-8 bg-gray-800 border-b border-gray-600 flex items-center justify-between px-3 drag-handle cursor-move select-none">
+                <header class="h-10 md:h-8 bg-gray-800 border-b border-gray-600 flex items-center justify-between px-3 drag-handle cursor-move select-none">
                     <div class="flex items-center gap-2 text-gray-300 font-mono text-xs md:text-sm">
-                        <i class="fas fa-terminal"></i>
+                        <i class="fas fa-terminal" aria-hidden="true"></i>
                         <span>bash -- ca-term</span>
                     </div>
                     <div class="flex gap-4 md:gap-2 window-controls">
-                        <button onclick="closeWindow('terminal-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1"><i class="fas fa-times text-lg md:text-sm"></i></button>
+                        <button onclick="closeWindow('terminal-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1" aria-label="Close Terminal"><i class="fas fa-times text-lg md:text-sm" aria-hidden="true"></i></button>
                     </div>
-                </div>
+                </header>
                 <div class="window-content bg-black/95 p-4 font-mono text-xs md:text-sm text-gray-300 h-full overflow-y-auto" onclick="document.getElementById('term-input').focus()">
                     <div class="mb-4 text-cyan leading-tight whitespace-pre">
-  ____    _       ___   ____  
- / ___|  / \     / _ \ / ___| 
-| |     / _ \   | | | |\___ \ 
+  ____    _       ___   ____
+ / ___|  / \     / _ \ / ___|
+| |     / _ \   | | | |\___ \
 | |___ / ___ \  | |_| | ___) |
  \____/_/   \_\  \___/ |____/ v2.0
                     </div>
@@ -736,42 +768,42 @@
                     </div>
                     <div class="mb-2 text-gray-500">Initialized at <span id="term-date"></span></div>
                     <div class="mb-2">Type <span class="text-yellow-400">'help'</span> to see available commands.</div>
-                    
+
                     <div id="terminal-output" class="space-y-1 mb-2"></div>
-                    
+
                     <div class="flex items-center">
                         <span class="text-green-400 mr-2">guest@chamath-os:~$</span>
-                        <input type="text" id="term-input" class="bg-transparent border-none outline-none text-white flex-grow font-mono" autocomplete="off" spellcheck="false">
+                        <input type="text" id="term-input" class="bg-transparent border-none outline-none text-white flex-grow font-mono" autocomplete="off" spellcheck="false" aria-label="Terminal Input">
                     </div>
                 </div>
             </div>
 
-        </div>
+        </section>
 
         <!-- Taskbar -->
-        <div class="h-12 bg-black/80 border-t border-white/10 flex items-center px-2 md:px-4 z-[55] backdrop-blur-md">
+        <footer class="h-12 bg-black/80 border-t border-white/10 flex items-center px-2 md:px-4 z-[55] backdrop-blur-md">
             <!-- Start Button -->
-            <button onclick="toggleStartMenu()" class="flex items-center gap-2 px-4 py-1.5 bg-cyan/10 hover:bg-cyan/30 border border-cyan/40 rounded text-cyan font-bold font-sci text-sm transition-all mr-4 shadow-[0_0_10px_rgba(0,243,255,0.2)] hover:shadow-[0_0_20px_rgba(0,243,255,0.5)] active:scale-95">
-                <i class="fas fa-rocket"></i> <span class="hidden md:inline">LAUNCH</span>
+            <button onclick="toggleStartMenu()" class="flex items-center gap-2 px-4 py-1.5 bg-cyan/10 hover:bg-cyan/30 border border-cyan/40 rounded text-cyan font-bold font-sci text-sm transition-all mr-4 shadow-[0_0_10px_rgba(0,243,255,0.2)] hover:shadow-[0_0_20px_rgba(0,243,255,0.5)] active:scale-95" aria-label="Open Start Menu">
+                <i class="fas fa-rocket" aria-hidden="true"></i> <span class="hidden md:inline">LAUNCH</span>
             </button>
-            
+
             <!-- Open Windows List (Hidden on Mobile for cleaner look) -->
             <div class="flex-grow flex gap-2 overflow-x-auto hide-scrollbar hidden md:flex" id="taskbar-apps">
                 <!-- Dynamically populated -->
             </div>
-            
+
             <!-- Mobile spacer -->
             <div class="flex-grow md:hidden"></div>
 
             <!-- Tray Icons -->
             <div class="flex items-center gap-3 md:gap-4 text-gray-400 text-xs px-2 md:border-l md:border-white/10 ml-2">
-                <i class="fas fa-wifi text-cyan animate-pulse"></i>
-                <i class="fas fa-volume-up hidden md:inline"></i>
-                <i class="fas fa-battery-full text-green-400"></i>
+                <i class="fas fa-wifi text-cyan animate-pulse" aria-hidden="true" title="Connected"></i>
+                <i class="fas fa-volume-up hidden md:inline" aria-hidden="true" title="Volume"></i>
+                <i class="fas fa-battery-full text-green-400" aria-hidden="true" title="Battery Full"></i>
                 <span class="md:hidden text-white font-bold ml-2" id="mobile-clock">00:00</span>
             </div>
-        </div>
-    </div>
+        </footer>
+    </main>
 
     <!-- Scripts -->
     <script>
@@ -780,7 +812,7 @@
         const bootProgress = document.getElementById('boot-progress');
         const bootScreen = document.getElementById('boot-screen');
         const osInterface = document.getElementById('os-interface');
-        
+
         const bootMessages = [
             "BIOS DATE 05/12/2025 15:23:01 VER 2.0.0",
             "CPU: QUANTUM CORE i9 - 128 CORES DETECTED",
@@ -795,17 +827,17 @@
         ];
 
         let msgIndex = 0;
-        
+
         function typeBootLog() {
             if (msgIndex < bootMessages.length) {
                 const div = document.createElement('div');
                 div.innerText = "> " + bootMessages[msgIndex];
                 div.className = "text-green-400"; // Matrix style text
                 if(msgIndex > 6) div.className = "text-cyan";
-                
+
                 bootLog.appendChild(div);
                 bootLog.scrollTop = bootLog.scrollHeight;
-                
+
                 // Update Progress bar
                 const progress = ((msgIndex + 1) / bootMessages.length) * 100;
                 bootProgress.style.width = `${progress}%`;
@@ -833,7 +865,7 @@
 
         // --- WINDOW MANAGEMENT ---
         let maxZIndex = 50;
-        
+
         function openWindow(id) {
             const win = document.getElementById(id);
             win.classList.add('active');
@@ -890,24 +922,24 @@
             handle.addEventListener('mousedown', (e) => {
                 // Disable drag on mobile/maximized
                 if(window.innerWidth <= 768 || win.style.width === "100%") return;
-                
+
                 isDragging = true;
                 startX = e.clientX;
                 startY = e.clientY;
-                
+
                 const rect = win.getBoundingClientRect();
                 initialLeft = rect.left;
-                initialTop = rect.top; 
+                initialTop = rect.top;
             });
 
             window.addEventListener('mousemove', (e) => {
                 if (!isDragging) return;
                 const dx = e.clientX - startX;
                 const dy = e.clientY - startY;
-                
+
                 win.style.left = `${initialLeft + dx}px`;
                 win.style.top = `${initialTop + dy}px`;
-                win.style.transform = 'none'; 
+                win.style.transform = 'none';
             });
 
             window.addEventListener('mouseup', () => {
@@ -943,12 +975,12 @@
 
         // --- START MENU LOGIC ---
         const startMenu = document.getElementById('start-menu');
-        
+
         function toggleStartMenu() {
             startMenu.classList.toggle('hidden-menu');
             startMenu.classList.toggle('visible-menu');
         }
-        
+
         // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!startMenu.contains(e.target) && !e.target.closest('button[onclick="toggleStartMenu()"]')) {
@@ -962,19 +994,19 @@
         const termInput = document.getElementById('term-input');
         const termOutput = document.getElementById('terminal-output');
         document.getElementById('term-date').innerText = new Date().toLocaleString();
-        
+
         termInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const command = this.value.trim().toLowerCase();
                 this.value = '';
-                
+
                 processCommand(command);
             }
         });
 
         function processCommand(cmd) {
             addToTerm(`guest@chamath-os:~$ ${cmd}`, 'text-gray-400');
-            
+
             // Clean command (remove sudo if present just for parsing)
             const cleanCmd = cmd.replace('sudo ', '');
 
@@ -987,7 +1019,7 @@
                 addToTerm("Permission denied: user is not in the sudoers file. This incident will be reported.", 'text-red-500');
                 return;
             }
-            
+
             switch(baseCmd) {
                 case 'help':
                     addToTerm("Available commands: help, ls, cat, echo, whoami, projects, skills, socials, contact, clear, date, weather, fact, matrix, reboot", 'text-cyan');
@@ -1098,7 +1130,7 @@
             const timeString = now.toLocaleTimeString();
             document.getElementById('clock').innerText = timeString;
             document.getElementById('mobile-clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
+
             // Random CPU fluctuation for effect
             if(Math.random() > 0.5) {
                 document.getElementById('cpu-stat').innerText = `CPU: ${Math.floor(Math.random() * 30 + 5)}%`;
@@ -1113,7 +1145,7 @@
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-            
+
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
 

@@ -70,6 +70,9 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
 
+    <!-- External Styles -->
+    <link rel="stylesheet" href="style.css">
+
     <script>
         tailwind.config = {
             theme: {
@@ -108,154 +111,14 @@
             }
         }
     </script>
-
-    <style>
-        /* Core OS Styles */
-        body {
-            background-color: #000;
-            overflow: hidden;
-            /* Custom Cursor for Desktop */
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2300f3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>') 12 12, auto;
-            touch-action: none; /* Prevent browser zooming/scrolling on mobile */
-        }
-
-        /* Scanline Overlay */
-        .scanlines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.3;
-        }
-
-        /* CRT Flicker */
-        .crt::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-        }
-
-        /* Window Styling */
-        .os-window {
-            position: absolute;
-            background: rgba(5, 10, 20, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-            border-radius: 6px;
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            transition: opacity 0.2s, transform 0.2s;
-            transform: scale(0.95);
-            opacity: 0;
-        }
-
-        .os-window.active {
-            display: flex;
-            opacity: 1;
-            transform: scale(1);
-            z-index: 50;
-        }
-
-        /* Mobile Specifics */
-        @media (max-width: 768px) {
-            .os-window.active {
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: calc(100% - 3rem) !important; /* Leave space for taskbar */
-                border: none;
-                border-radius: 0;
-                transform: none;
-                z-index: 60; /* Higher than desktop windows */
-            }
-            .desktop-icon-grid {
-                grid-template-columns: repeat(2, 1fr); /* 2 cols on mobile for better spacing */
-                gap: 1.5rem;
-                padding: 1.5rem;
-                justify-items: center;
-            }
-            .drag-handle {
-                cursor: default !important;
-                padding-top: 1rem;
-                padding-bottom: 1rem;
-            }
-
-            /* Start Menu Mobile */
-            #start-menu {
-                width: 90% !important;
-                left: 5% !important;
-                bottom: 3.5rem !important;
-            }
-
-            /* Larger text for inputs on mobile to prevent zoom */
-            input[type="text"] {
-                font-size: 16px !important;
-            }
-
-            /* Better touch targets for window controls */
-            .window-controls button {
-                padding: 0.5rem !important;
-            }
-        }
-
-        /* Custom Scrollbar inside windows */
-        .window-content {
-            touch-action: pan-y; /* Enable vertical scrolling on touch devices */
-        }
-        .window-content::-webkit-scrollbar {
-            width: 4px;
-        }
-        .window-content::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.5);
-        }
-        .window-content::-webkit-scrollbar-thumb {
-            background: #00f3ff;
-            border-radius: 2px;
-        }
-
-        /* Start Menu Animation */
-        #start-menu {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: bottom left;
-        }
-        #start-menu.hidden-menu {
-            opacity: 0;
-            transform: scale(0.9) translateY(10px);
-            pointer-events: none;
-        }
-        #start-menu.visible-menu {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-            pointer-events: auto;
-        }
-
-        /* Tooltip behavior for funny quotes */
-        .skill-item:hover .skill-quote {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
 </head>
 <body class="crt font-sans text-gray-200 selection:bg-cyan selection:text-black">
 
     <!-- 3D Background -->
     <canvas id="bg-canvas" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
+
+    <!-- Hex Grid Overlay -->
+    <div class="hex-grid fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-20"></div>
 
     <!-- Scanlines -->
     <div class="scanlines"></div>
@@ -344,7 +207,7 @@
         <section class="flex-grow relative p-4 md:p-8" id="desktop-area">
 
             <!-- Desktop Icons Grid -->
-            <div class="grid desktop-icon-grid w-full md:w-auto md:grid-cols-1 md:absolute md:top-8 md:left-8 gap-8">
+            <div class="grid desktop-icon-grid w-full md:w-auto md:grid-cols-2 md:absolute md:top-8 md:left-8 gap-6 md:gap-8">
 
                 <!-- About Icon -->
                 <button onclick="openWindow('about-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95" aria-label="Open Profile">
@@ -381,6 +244,24 @@
                     </div>
                     <span class="text-xs font-mono bg-black/70 px-2 py-1 rounded text-shadow text-white border border-white/20">Terminal</span>
                 </button>
+
+                <!-- Calculator Icon -->
+                <button onclick="openWindow('calc-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95" aria-label="Open Calculator">
+                    <div class="w-16 h-16 md:w-14 md:h-14 rounded-xl bg-black/60 border border-yellow-400/50 flex items-center justify-center group-hover:shadow-[0_0_20px_#facc15] group-hover:border-yellow-400 transition-all relative overflow-hidden backdrop-blur-sm">
+                         <div class="absolute inset-0 bg-yellow-400/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+                        <i class="fas fa-calculator text-3xl md:text-2xl text-yellow-400 group-hover:scale-110 transition-transform" aria-hidden="true"></i>
+                    </div>
+                    <span class="text-xs font-mono bg-black/70 px-2 py-1 rounded text-shadow text-yellow-400 border border-yellow-400/20">Calc.exe</span>
+                </button>
+
+                <!-- Settings Icon -->
+                <button onclick="openWindow('settings-window')" class="group flex flex-col items-center gap-3 md:gap-2 p-2 rounded focus:outline-none transition-transform active:scale-95" aria-label="Open Settings">
+                    <div class="w-16 h-16 md:w-14 md:h-14 rounded-xl bg-black/60 border border-gray-400/50 flex items-center justify-center group-hover:shadow-[0_0_20px_#9ca3af] group-hover:border-gray-400 transition-all relative overflow-hidden backdrop-blur-sm">
+                         <div class="absolute inset-0 bg-gray-400/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+                        <i class="fas fa-cog text-3xl md:text-2xl text-gray-400 group-hover:scale-110 transition-transform group-hover:rotate-90 duration-500" aria-hidden="true"></i>
+                    </div>
+                    <span class="text-xs font-mono bg-black/70 px-2 py-1 rounded text-shadow text-gray-400 border border-gray-400/20">Config</span>
+                </button>
             </div>
 
             <!-- START MENU (Hidden by default) -->
@@ -409,6 +290,12 @@
                     </button>
                     <button onclick="openWindow('terminal-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-white transition-colors" aria-label="Open Terminal">
                         <i class="fas fa-terminal w-5 text-center" aria-hidden="true"></i> Terminal
+                    </button>
+                    <button onclick="openWindow('calc-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-yellow-400 transition-colors" aria-label="Open Calculator">
+                        <i class="fas fa-calculator w-5 text-center" aria-hidden="true"></i> Calculator
+                    </button>
+                    <button onclick="openWindow('settings-window'); toggleStartMenu()" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-gray-400 transition-colors" aria-label="Open Settings">
+                        <i class="fas fa-cog w-5 text-center" aria-hidden="true"></i> System Config
                     </button>
                     <div class="h-px bg-white/10 my-1"></div>
                     <a href="mailto:achamath1@gmail.com" class="w-full text-left px-4 py-3 hover:bg-white/10 rounded flex items-center gap-3 text-sm text-gray-300 hover:text-yellow-400 transition-colors" aria-label="Contact Email">
@@ -723,7 +610,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-magenta/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fas fa-bolt text-cyan mr-2 text-lg" aria-hidden="true"></i>
+                                            <i class="fab fa-bolt text-cyan mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-magenta font-mono text-xs">FastAPI / Express</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">90%</span>
@@ -765,7 +652,7 @@
                                     </div>
                                     <div class="skill-item relative group bg-gray-800 p-2 rounded border border-white/5 hover:border-blue-400/30 flex justify-between items-center cursor-help">
                                         <div class="flex items-center">
-                                            <i class="fas fa-code-branch text-blue-400 mr-2 text-lg" aria-hidden="true"></i>
+                                            <i class="fab fa-code-branch text-blue-400 mr-2 text-lg" aria-hidden="true"></i>
                                             <span class="text-blue-400 font-mono text-xs">Terraform / Ansible</span>
                                         </div>
                                         <span class="text-white text-xs font-bold">80%</span>
@@ -827,6 +714,93 @@
                 </div>
             </div>
 
+            <!-- 5. Calculator Window -->
+            <div id="calc-window" class="os-window w-full md:w-[300px] h-auto top-0 md:top-[30%] md:left-[40%] border-yellow-400/30">
+                <header class="h-8 bg-gray-900 border-b border-yellow-400/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
+                    <div class="flex items-center gap-2 text-yellow-400 font-mono text-xs">
+                        <i class="fas fa-calculator" aria-hidden="true"></i>
+                        <span>QC-8000</span>
+                    </div>
+                    <div class="flex gap-2 window-controls">
+                        <button onclick="closeWindow('calc-window')" class="text-red-500 hover:text-red-400 px-1"><i class="fas fa-times" aria-hidden="true"></i></button>
+                    </div>
+                </header>
+                <div class="window-content bg-black/90 p-4">
+                    <div class="bg-green-900/20 border border-green-500/30 p-2 mb-3 text-right font-mono text-xl text-green-400 shadow-[inset_0_0_10px_rgba(0,255,0,0.1)] h-10 overflow-hidden" id="calc-display">0</div>
+                    <div class="grid grid-cols-4 gap-2 font-mono text-sm">
+                        <button onclick="calcInput('C')" class="col-span-1 bg-red-900/30 text-red-400 border border-red-500/30 rounded p-2 hover:bg-red-500/20">C</button>
+                        <button onclick="calcInput('/')" class="bg-gray-800 text-yellow-400 border border-gray-600 rounded p-2 hover:bg-gray-700">/</button>
+                        <button onclick="calcInput('*')" class="bg-gray-800 text-yellow-400 border border-gray-600 rounded p-2 hover:bg-gray-700">*</button>
+                        <button onclick="calcInput('-')" class="bg-gray-800 text-yellow-400 border border-gray-600 rounded p-2 hover:bg-gray-700">-</button>
+
+                        <button onclick="calcInput('7')" class="bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">7</button>
+                        <button onclick="calcInput('8')" class="bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">8</button>
+                        <button onclick="calcInput('9')" class="bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">9</button>
+                        <button onclick="calcInput('+')" class="row-span-2 bg-gray-800 text-yellow-400 border border-gray-600 rounded p-2 hover:bg-gray-700 h-full flex items-center justify-center">+</button>
+
+                        <button onclick="calcInput('4')" class="bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">4</button>
+                        <button onclick="calcInput('5')" class="bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">5</button>
+                        <button onclick="calcInput('6')" class="bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">6</button>
+
+                        <button onclick="calcInput('1')" class="bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">1</button>
+                        <button onclick="calcInput('2')" class="bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">2</button>
+                        <button onclick="calcInput('3')" class="bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">3</button>
+                        <button onclick="calcInput('=')" class="row-span-2 bg-yellow-600/30 text-yellow-400 border border-yellow-500/30 rounded p-2 hover:bg-yellow-500/20 h-full flex items-center justify-center">=</button>
+
+                        <button onclick="calcInput('0')" class="col-span-2 bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">0</button>
+                        <button onclick="calcInput('.')" class="bg-black/50 text-cyan border border-cyan/20 rounded p-2 hover:bg-cyan/10">.</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Settings Window -->
+            <div id="settings-window" class="os-window w-full md:w-[400px] h-auto top-0 md:top-[20%] md:left-[30%] border-gray-400/30">
+                <header class="h-8 bg-gray-900 border-b border-gray-400/30 flex items-center justify-between px-3 drag-handle cursor-move select-none">
+                    <div class="flex items-center gap-2 text-gray-300 font-mono text-xs">
+                        <i class="fas fa-cog animate-spin-slow" aria-hidden="true"></i>
+                        <span>SYSTEM_CONFIG</span>
+                    </div>
+                    <div class="flex gap-2 window-controls">
+                        <button onclick="closeWindow('settings-window')" class="text-red-500 hover:text-red-400 px-1"><i class="fas fa-times" aria-hidden="true"></i></button>
+                    </div>
+                </header>
+                <div class="window-content bg-black/90 p-6 font-mono text-sm space-y-6">
+
+                    <!-- Audio -->
+                    <div>
+                        <h3 class="text-cyan border-b border-cyan/30 pb-1 mb-3">AUDIO_MODULE</h3>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-gray-400">Master Volume</span>
+                            <span id="vol-level" class="text-green-400">30%</span>
+                        </div>
+                        <input type="range" min="0" max="100" value="30" class="w-full accent-cyan h-1 bg-gray-700 rounded appearance-none cursor-pointer" oninput="setVolume(this.value)">
+                        <div class="mt-2">
+                            <button onclick="toggleMuteBtn()" id="mute-btn" class="w-full border border-red-500/30 text-red-400 py-1 rounded hover:bg-red-500/10 transition-colors text-xs uppercase">Disable Audio</button>
+                        </div>
+                    </div>
+
+                    <!-- Visuals -->
+                    <div>
+                        <h3 class="text-magenta border-b border-magenta/30 pb-1 mb-3">VISUAL_CORE</h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-400">CRT Scanlines</span>
+                            <button onclick="toggleScanlines()" id="scanline-btn" class="text-green-400 hover:text-green-300">[ENABLED]</button>
+                        </div>
+                    </div>
+
+                    <!-- Theme -->
+                    <div>
+                        <h3 class="text-yellow-400 border-b border-yellow-400/30 pb-1 mb-3">THEME_OVERRRIDE</h3>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="setTheme('cyan')" class="border border-cyan text-cyan hover:bg-cyan hover:text-black py-2 rounded text-xs">CYAN</button>
+                            <button onclick="setTheme('amber')" class="border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black py-2 rounded text-xs">AMBER</button>
+                            <button onclick="setTheme('green')" class="border border-green-500 text-green-500 hover:bg-green-500 hover:text-black py-2 rounded text-xs">GREEN</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </section>
 
         <!-- Taskbar -->
@@ -847,7 +821,9 @@
             <!-- Tray Icons -->
             <div class="flex items-center gap-3 md:gap-4 text-gray-400 text-xs px-2 md:border-l md:border-white/10 ml-2">
                 <i class="fas fa-wifi text-cyan animate-pulse" aria-hidden="true" title="Connected"></i>
-                <i class="fas fa-volume-up hidden md:inline" aria-hidden="true" title="Volume"></i>
+                <button onclick="toggleMuteBtn()" class="focus:outline-none hover:text-white transition-colors" aria-label="Toggle Sound">
+                    <i class="fas fa-volume-up" id="tray-vol-icon" title="Volume"></i>
+                </button>
                 <i class="fas fa-battery-full text-green-400" aria-hidden="true" title="Battery Full"></i>
                 <span class="md:hidden text-white font-bold ml-2" id="mobile-clock">00:00</span>
             </div>
@@ -855,391 +831,6 @@
     </main>
 
     <!-- Scripts -->
-    <script>
-        // --- BOOT SEQUENCE LOGIC ---
-        const bootLog = document.getElementById('boot-log');
-        const bootProgress = document.getElementById('boot-progress');
-        const bootScreen = document.getElementById('boot-screen');
-        const osInterface = document.getElementById('os-interface');
-
-        const bootMessages = [
-            "BIOS DATE 05/12/2025 15:23:01 VER 2.0.0",
-            "CPU: QUANTUM CORE i9 - 128 CORES DETECTED",
-            "MEM: 64TB RAM OK",
-            "INITIALIZING CHAMATH-ADITHYA KERNEL...",
-            "LOADING DRIVERS: [GPU] [NET] [AI_CORE]",
-            "MOUNTING FILESYSTEMS... OK",
-            "CHECKING SECURITY PROTOCOLS... OK",
-            "CONNECTING TO NEURAL NET... ESTABLISHED",
-            "LOADING USER PROFILE: GUEST",
-            "SYSTEM READY."
-        ];
-
-        let msgIndex = 0;
-
-        function typeBootLog() {
-            if (msgIndex < bootMessages.length) {
-                const div = document.createElement('div');
-                div.innerText = "> " + bootMessages[msgIndex];
-                div.className = "text-green-400"; // Matrix style text
-                if(msgIndex > 6) div.className = "text-cyan";
-
-                bootLog.appendChild(div);
-                bootLog.scrollTop = bootLog.scrollHeight;
-
-                // Update Progress bar
-                const progress = ((msgIndex + 1) / bootMessages.length) * 100;
-                bootProgress.style.width = `${progress}%`;
-
-                msgIndex++;
-                setTimeout(typeBootLog, Math.random() * 200 + 50); // Faster boot
-            } else {
-                setTimeout(() => {
-                    bootScreen.style.opacity = '0';
-                    setTimeout(() => {
-                        bootScreen.style.display = 'none';
-                        osInterface.style.display = 'flex';
-                        // Auto open about window on start for desktop, maybe not mobile
-                        if(window.innerWidth > 768) {
-                            setTimeout(() => openWindow('about-window'), 500);
-                        }
-                    }, 500);
-                }, 500);
-            }
-        }
-
-        // Start Boot on Load
-        window.addEventListener('load', typeBootLog);
-
-
-        // --- WINDOW MANAGEMENT ---
-        let maxZIndex = 50;
-
-        function openWindow(id) {
-            const win = document.getElementById(id);
-            win.classList.add('active');
-            moveToFront(id);
-            addToTaskbar(id);
-        }
-
-        function closeWindow(id) {
-            const win = document.getElementById(id);
-            win.classList.remove('active');
-            removeFromTaskbar(id);
-        }
-
-        function minimizeWindow(id) {
-            closeWindow(id); // Simple minimize behavior
-        }
-
-        function maximizeWindow(id) {
-            const win = document.getElementById(id);
-            if(win.style.width === "100%") {
-                win.style.width = "";
-                win.style.height = "";
-                win.style.top = "";
-                win.style.left = "";
-            } else {
-                win.style.width = "100%";
-                win.style.height = "100%";
-                win.style.top = "0";
-                win.style.left = "0";
-            }
-        }
-
-        function moveToFront(id) {
-            const win = document.getElementById(id);
-            if(win) {
-                maxZIndex++;
-                win.style.zIndex = maxZIndex;
-            }
-        }
-
-        // Draggable Logic (Desktop Only)
-        const windows = document.querySelectorAll('.os-window');
-        windows.forEach(win => {
-            const handle = win.querySelector('.drag-handle');
-            if(!handle) return;
-
-            win.addEventListener('mousedown', () => moveToFront(win.id));
-            // Mobile touch event for z-index
-            win.addEventListener('touchstart', () => moveToFront(win.id), {passive: true});
-
-            let isDragging = false;
-            let startX, startY, initialLeft, initialTop;
-
-            handle.addEventListener('mousedown', (e) => {
-                // Disable drag on mobile/maximized
-                if(window.innerWidth <= 768 || win.style.width === "100%") return;
-
-                isDragging = true;
-                startX = e.clientX;
-                startY = e.clientY;
-
-                const rect = win.getBoundingClientRect();
-                initialLeft = rect.left;
-                initialTop = rect.top;
-            });
-
-            window.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
-
-                win.style.left = `${initialLeft + dx}px`;
-                win.style.top = `${initialTop + dy}px`;
-                win.style.transform = 'none';
-            });
-
-            window.addEventListener('mouseup', () => {
-                isDragging = false;
-            });
-        });
-
-        // --- TASKBAR LOGIC ---
-        function addToTaskbar(id) {
-            const container = document.getElementById('taskbar-apps');
-            const existing = document.getElementById(`task-${id}`);
-            if (existing) return;
-
-            const nameMap = {
-                'about-window': 'Profile',
-                'projects-window': 'Projects',
-                'skills-window': 'Skills',
-                'terminal-window': 'Terminal'
-            };
-
-            const btn = document.createElement('button');
-            btn.id = `task-${id}`;
-            btn.className = "px-3 py-1 bg-white/10 border-b-2 border-cyan text-gray-300 text-xs font-mono hover:bg-white/20 transition-colors flex items-center gap-2";
-            btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span> ${nameMap[id]}`;
-            btn.onclick = () => openWindow(id);
-            container.appendChild(btn);
-        }
-
-        function removeFromTaskbar(id) {
-            const btn = document.getElementById(`task-${id}`);
-            if (btn) btn.remove();
-        }
-
-        // --- START MENU LOGIC ---
-        const startMenu = document.getElementById('start-menu');
-
-        function toggleStartMenu() {
-            startMenu.classList.toggle('hidden-menu');
-            startMenu.classList.toggle('visible-menu');
-        }
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!startMenu.contains(e.target) && !e.target.closest('button[onclick="toggleStartMenu()"]')) {
-                startMenu.classList.add('hidden-menu');
-                startMenu.classList.remove('visible-menu');
-            }
-        });
-
-
-        // --- TERMINAL LOGIC ---
-        const termInput = document.getElementById('term-input');
-        const termOutput = document.getElementById('terminal-output');
-        document.getElementById('term-date').innerText = new Date().toLocaleString();
-
-        termInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                const command = this.value.trim().toLowerCase();
-                this.value = '';
-
-                processCommand(command);
-            }
-        });
-
-        function processCommand(cmd) {
-            addToTerm(`guest@chamath-os:~$ ${cmd}`, 'text-gray-400');
-
-            // Clean command (remove sudo if present just for parsing)
-            const cleanCmd = cmd.replace('sudo ', '');
-
-            // Basic parsing for args
-            const parts = cleanCmd.split(' ');
-            const baseCmd = parts[0];
-            const args = parts.slice(1).join(' ');
-
-            if (cmd.startsWith('sudo')) {
-                addToTerm("Permission denied: user is not in the sudoers file. This incident will be reported.", 'text-red-500');
-                return;
-            }
-
-            switch(baseCmd) {
-                case 'help':
-                    addToTerm("Available commands: help, ls, cat, echo, whoami, projects, skills, socials, contact, clear, date, weather, fact, matrix, reboot", 'text-cyan');
-                    break;
-                case 'ls':
-                    addToTerm("profile.exe  projects_db  skills.sys  socials.txt  README.txt", 'text-green-300');
-                    break;
-                case 'cat':
-                    if (!args) {
-                        addToTerm("Usage: cat <filename>", 'text-yellow-400');
-                    } else if (args === 'readme.txt') {
-                        addToTerm("----------------------------------------", 'text-gray-500');
-                        addToTerm("Welcome to Chamath-Adithya OS v2.0", 'text-white');
-                        addToTerm("This is an interactive portfolio designed", 'text-gray-400');
-                        addToTerm("to showcase my skills in IoT & Web Dev.", 'text-gray-400');
-                        addToTerm("----------------------------------------", 'text-gray-500');
-                    } else if (args === 'socials.txt') {
-                         addToTerm("GitHub: https://github.com/Chamath-Adithya", 'text-blue-300');
-                         addToTerm("LinkedIn: https://linkedin.com/in/chamath-adithya", 'text-blue-300');
-                    } else if (args === 'profile.exe' || args === 'projects_db' || args === 'skills.sys') {
-                        addToTerm("Error: Binary file not readable. Use GUI to open.", 'text-red-400');
-                    } else {
-                        addToTerm(`File not found: ${args}`, 'text-red-500');
-                    }
-                    break;
-                case 'echo':
-                    addToTerm(args, 'text-white');
-                    break;
-                case 'whoami':
-                    addToTerm("Chamath Adithya | Founder & CTO | SOLVEO", 'text-magenta');
-                    break;
-                case 'projects':
-                    addToTerm("Opening Project Database...", 'text-green-400');
-                    openWindow('projects-window');
-                    break;
-                case 'skills':
-                    addToTerm("Listing System Capabilities...", 'text-green-400');
-                    addToTerm("LANGUAGES: JS, TS, C++, Rust, Go, Python, PHP, Dart", 'text-gray-300');
-                    addToTerm("HARDWARE: ESP32, Arduino, Raspberry Pi, MQTT", 'text-gray-300');
-                    addToTerm("CLOUD: AWS, Docker, K8s, Firebase, Terraform", 'text-gray-300');
-                    addToTerm("SECURITY: Kali, Metasploit, Wireshark, Burp", 'text-gray-300');
-                    break;
-                 case 'socials':
-                    addToTerm("GitHub: https://github.com/Chamath-Adithya", 'text-blue-300');
-                    addToTerm("LinkedIn: https://linkedin.com/in/chamath-adithya", 'text-blue-300');
-                    break;
-                case 'contact':
-                    addToTerm("Email: achamath1@gmail.com", 'text-white');
-                    addToTerm("Opening mail client...", 'text-gray-500');
-                    setTimeout(() => window.location.href = "mailto:achamath1@gmail.com", 1000);
-                    break;
-                case 'weather':
-                    addToTerm("Location: Sri Lanka", 'text-gray-400');
-                    addToTerm("Condition: Partly Cloudy, 28°C", 'text-yellow-300');
-                    addToTerm("Humidity: 82%", 'text-blue-300');
-                    break;
-                case 'fact':
-                    const facts = [
-                        "The first computer bug was an actual moth.",
-                        "IoT devices will outnumber humans 3 to 1 by 2025.",
-                        "The Apollo 11 guidance computer had less processing power than a modern calculator.",
-                        "Linux powers 100% of the world's top 500 supercomputers."
-                    ];
-                    addToTerm(facts[Math.floor(Math.random() * facts.length)], 'text-magenta');
-                    break;
-                case 'matrix':
-                     // Fun little text loop
-                     let i = 0;
-                     const matrixInterval = setInterval(() => {
-                        addToTerm(Math.random().toString(36).substring(7), 'text-green-500');
-                        i++;
-                        if(i > 20) clearInterval(matrixInterval);
-                        // Auto scroll
-                        const container = document.querySelector('#terminal-window .window-content');
-                        container.scrollTop = container.scrollHeight;
-                     }, 50);
-                     break;
-                case 'clear':
-                    termOutput.innerHTML = '';
-                    break;
-                case 'date':
-                    addToTerm(new Date().toString(), 'text-white');
-                    break;
-                case 'reboot':
-                    location.reload();
-                    break;
-                case '':
-                    break;
-                default:
-                    addToTerm(`Command not found: ${cmd}`, 'text-red-500');
-            }
-            // Scroll to bottom
-            const container = document.querySelector('#terminal-window .window-content');
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function addToTerm(text, colorClass) {
-            const div = document.createElement('div');
-            div.className = colorClass;
-            div.textContent = text;
-            termOutput.appendChild(div);
-        }
-
-
-        // --- CLOCK & STATS ---
-        function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById('clock').innerText = timeString;
-            document.getElementById('mobile-clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-            // Random CPU fluctuation for effect
-            if(Math.random() > 0.5) {
-                document.getElementById('cpu-stat').innerText = `CPU: ${Math.floor(Math.random() * 30 + 5)}%`;
-            }
-        }
-        setInterval(updateClock, 1000);
-
-
-        // --- 3D BACKGROUND (THREE.JS) ---
-        const initThreeJS = () => {
-            const canvas = document.getElementById('bg-canvas');
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-
-            // Create Starfield
-            const starsGeometry = new THREE.BufferGeometry();
-            const starsCount = 2000;
-            const posArray = new Float32Array(starsCount * 3);
-
-            for(let i = 0; i < starsCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 100;
-            }
-
-            starsGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-            const starsMaterial = new THREE.PointsMaterial({
-                size: 0.15,
-                color: 0x00f3ff,
-                transparent: true,
-                opacity: 0.8,
-            });
-
-            const starMesh = new THREE.Points(starsGeometry, starsMaterial);
-            scene.add(starMesh);
-
-            camera.position.z = 30;
-
-            // Animation
-            const animate = () => {
-                requestAnimationFrame(animate);
-                starMesh.rotation.y += 0.0005;
-                starMesh.rotation.x += 0.0002;
-                renderer.render(scene, camera);
-            };
-
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        };
-
-        initThreeJS();
-
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -263,15 +263,64 @@
     <!-- Boot Sequence Overlay -->
     <div id="boot-screen" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center font-mono text-cyan p-4">
         <div class="w-full max-w-2xl">
+            <!-- Static H1 for SEO - Visually integrated -->
+            <h1 class="text-center text-cyan font-sci text-xl md:text-2xl mb-4 tracking-widest border-b border-cyan/30 pb-2">
+                CHAMATH ADITHYA SYSTEM BOOT
+            </h1>
+
             <div id="boot-log" class="text-xs md:text-sm space-y-1 mb-8 h-64 overflow-hidden border-l-2 border-cyan pl-4 bg-black/50 p-2 font-bold shadow-[inset_0_0_20px_rgba(0,243,255,0.1)]">
                 <!-- JS will populate this -->
+                <div class="text-green-400">> BIOS DATE 05/12/2025 15:23:01 VER 2.0.0</div>
+                <div class="text-green-400">> CPU: QUANTUM CORE i9 - 128 CORES DETECTED</div>
+                <div class="text-green-400">> LOADING USER: CHAMATH ADITHYA (CTO)</div>
             </div>
             <div class="w-full bg-gray-900 h-1.5 rounded overflow-hidden relative">
                 <div id="boot-progress" class="absolute top-0 left-0 h-full bg-cyan shadow-[0_0_15px_#00f3ff] transition-all duration-200" style="width: 0%"></div>
             </div>
-            <div class="text-center mt-3 text-xs animate-pulse tracking-widest text-magenta">INITIALIZING CHAMATH-ADITHYA OS...</div>
+            <div class="text-center mt-3 text-xs animate-pulse tracking-widest text-magenta">INITIALIZING SECURE ENVIRONMENT...</div>
         </div>
     </div>
+
+    <!-- Noscript for SEO and non-JS users -->
+    <noscript>
+        <div class="p-8 text-gray-300 font-sans">
+            <header>
+                <h1 class="text-3xl font-bold mb-4">Chamath Adithya - CTO & IoT Specialist</h1>
+                <p>Founder & CTO of SOLVEO. Based in Sri Lanka. Expert in IoT, Cybersecurity, and Embedded Systems.</p>
+            </header>
+            <main>
+                <section>
+                    <h2>About Me</h2>
+                    <p>I merge software, IoT, Cybersecurity, and Automation to build next-generation secure frameworks. I specialize in TinyML, Edge AI, and System Architecture.</p>
+                </section>
+                <section>
+                    <h2>Skills</h2>
+                    <ul>
+                        <li>Languages: JavaScript, TypeScript, C, C++, Python, Rust, Go, Java, Dart, PHP</li>
+                        <li>IoT & Embedded: ESP32, Arduino, Raspberry Pi, MQTT, FreeRTOS, TinyML</li>
+                        <li>Cybersecurity: Kali Linux, Wireshark, Nmap, Burp Suite, Metasploit</li>
+                        <li>Frameworks: React, Next.js, Node.js, Electron, Flutter, FastAPI</li>
+                        <li>Cloud & DevOps: Docker, Kubernetes, AWS, Firebase, Linux (Arch/Ubuntu), Terraform</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Projects</h2>
+                    <ul>
+                        <li><a href="https://github.com/Chamath-Adithya/GoofyBLEProvisioning">GoofyBLEProvisioning</a> - ESP32 Arduino library for BLE WiFi provisioning.</li>
+                        <li><a href="https://github.com/Chamath-Adithya/Dayora-Audit-Man-Day-Calculator">Dayora Man-Day Calc</a> - Audit man-day calculator using TypeScript.</li>
+                        <li><a href="https://github.com/Chamath-Adithya/Arduino_Water_Cuality_Detector">Water Quality Detector</a> - Real-time water quality metrics with Arduino.</li>
+                        <li><a href="https://github.com/Chamath-Adithya/HX711-Pleasure_Sensor">HX711 Sensor Lib</a> - Hardware interface for HX711 load cells.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Contact</h2>
+                    <p>Email: <a href="mailto:achamath1@gmail.com">achamath1@gmail.com</a></p>
+                    <p>LinkedIn: <a href="https://www.linkedin.com/in/chamath-adithya-senanayaka-90264936b/">Chamath Adithya</a></p>
+                    <p>GitHub: <a href="https://github.com/Chamath-Adithya">Chamath-Adithya</a></p>
+                </section>
+            </main>
+        </div>
+    </noscript>
 
     <!-- Main OS Interface -->
     <main id="os-interface" class="fixed inset-0 hidden flex-col">

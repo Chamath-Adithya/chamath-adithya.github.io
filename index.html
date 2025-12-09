@@ -153,7 +153,7 @@
                 z-index: 60; /* Higher than desktop windows */
             }
             .desktop-icon-grid {
-                grid-template-columns: repeat(3, 1fr); /* 3 cols on mobile */
+                grid-template-columns: repeat(2, 1fr); /* 2 cols on mobile for better spacing */
                 gap: 1.5rem;
                 padding: 1.5rem;
                 justify-items: center;
@@ -170,9 +170,22 @@
                 left: 5% !important;
                 bottom: 3.5rem !important;
             }
+
+            /* Larger text for inputs on mobile to prevent zoom */
+            input[type="text"] {
+                font-size: 16px !important;
+            }
+
+            /* Better touch targets for window controls */
+            .window-controls button {
+                padding: 0.5rem !important;
+            }
         }
 
         /* Custom Scrollbar inside windows */
+        .window-content {
+            touch-action: pan-y; /* Enable vertical scrolling on touch devices */
+        }
         .window-content::-webkit-scrollbar {
             width: 4px;
         }
@@ -341,7 +354,7 @@
                         <i class="fas fa-user-circle animate-pulse"></i>
                         <span class="tracking-wider">USER_PROFILE :: CHAMATH</span>
                     </div>
-                    <div class="flex gap-4 md:gap-2">
+                    <div class="flex gap-4 md:gap-2 window-controls">
                         <button onclick="minimizeWindow('about-window')" class="hover:text-white text-gray-500 p-1"><i class="fas fa-minus"></i></button>
                         <button onclick="maximizeWindow('about-window')" class="hover:text-white text-gray-500 hidden md:block p-1"><i class="fas fa-expand"></i></button>
                         <button onclick="closeWindow('about-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1"><i class="fas fa-times text-lg md:text-sm"></i></button>
@@ -406,7 +419,7 @@
                         <i class="fas fa-folder-tree"></i>
                         <span>PROJECT_DB :: REPOSITORY_ACCESS</span>
                     </div>
-                    <div class="flex gap-4 md:gap-2">
+                    <div class="flex gap-4 md:gap-2 window-controls">
                         <button onclick="closeWindow('projects-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1"><i class="fas fa-times text-lg md:text-sm"></i></button>
                     </div>
                 </div>
@@ -493,7 +506,7 @@
                         <i class="fas fa-code-branch"></i>
                         <span>SYSTEM_CAPABILITIES :: SKILL_MATRIX_V2.0</span>
                     </div>
-                    <div class="flex gap-4 md:gap-2">
+                    <div class="flex gap-4 md:gap-2 window-controls">
                         <button onclick="closeWindow('skills-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1"><i class="fas fa-times text-lg md:text-sm"></i></button>
                     </div>
                 </div>
@@ -706,7 +719,7 @@
                         <i class="fas fa-terminal"></i>
                         <span>bash -- ca-term</span>
                     </div>
-                    <div class="flex gap-4 md:gap-2">
+                    <div class="flex gap-4 md:gap-2 window-controls">
                         <button onclick="closeWindow('terminal-window')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded px-2 py-1"><i class="fas fa-times text-lg md:text-sm"></i></button>
                     </div>
                 </div>

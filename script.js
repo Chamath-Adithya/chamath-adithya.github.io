@@ -390,22 +390,65 @@ initThreeJS();
 // --- AUDIO SYSTEM (Web Audio API) ---
 class SoundManager {
     constructor() {
-        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this.ctx = null;
+        this.masterGain = null;
         this.enabled = true;
-        this.masterGain = this.ctx.createGain();
-        this.masterGain.gain.value = 0.3; // Default volume
-        this.masterGain.connect(this.ctx.destination);
+        this.initialized = false;
+        this.volume = 0.3; // Store volume for lazy init
+    }
+
+    // Initialize Audio Context on first user interaction (Mobile Fix)
+    initAudio() {
+        if (this.initialized) return;
+
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+
+            this.ctx = new AudioContext();
+            this.masterGain = this.ctx.createGain();
+            this.masterGain.gain.value = this.enabled ? this.volume : 0;
+            this.masterGain.connect(this.ctx.destination);
+
+            // Play silent buffer to unlock iOS audio
+            const buffer = this.ctx.createBuffer(1, 1, 22050);
+            const source = this.ctx.createBufferSource();
+            source.buffer = buffer;
+            source.connect(this.ctx.destination);
+            source.start(0);
+
+            this.initialized = true;
+        } catch (e) {
+            console.error("Audio init failed:", e);
+        }
     }
 
     toggleMute() {
         this.enabled = !this.enabled;
-        this.masterGain.gain.value = this.enabled ? 0.3 : 0;
+        if (this.masterGain) {
+            this.masterGain.gain.value = this.enabled ? this.volume : 0;
+        }
         return this.enabled;
+    }
+
+    setVolume(val) {
+        this.volume = val;
+        if (this.masterGain) {
+            this.masterGain.gain.value = this.enabled ? this.volume : 0;
+        }
     }
 
     // Oscillator helper
     playTone(freq, type, duration, startTime = 0) {
         if (!this.enabled) return;
+        if (!this.initialized) this.initAudio();
+        if (!this.ctx) return;
+
+        // Ensure context is running
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume().catch(() => {});
+        }
+
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
 
@@ -423,11 +466,14 @@ class SoundManager {
     }
 
     playHover() {
+        // Disable hover sounds on touch devices
+        if (window.matchMedia('(hover: none)').matches) return;
         // High pitched short blip
         this.playTone(800, 'sine', 0.05);
     }
 
     playClick() {
+        this.initAudio(); // Ensure initialized
         // Mechanical click
         this.playTone(300, 'square', 0.05);
         this.playTone(600, 'sawtooth', 0.02, 0.01);
@@ -436,6 +482,10 @@ class SoundManager {
     playOpen() {
         // Rising sweep
         if (!this.enabled) return;
+        this.initAudio(); // Ensure initialized
+
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
 
@@ -460,6 +510,13 @@ class SoundManager {
 
 const audioSys = new SoundManager();
 
+// Global unlock for mobile
+['click', 'touchstart', 'keydown'].forEach(event => {
+    document.addEventListener(event, () => {
+        audioSys.initAudio();
+    }, { once: true });
+});
+
 // Attach sounds to UI elements
 document.addEventListener('mouseover', (e) => {
     if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.closest('.desktop-icon-grid button')) {
@@ -468,11 +525,6 @@ document.addEventListener('mouseover', (e) => {
 });
 
 document.addEventListener('click', (e) => {
-    // Resume context if suspended (browser policy)
-    if (audioSys.ctx.state === 'suspended') {
-        audioSys.ctx.resume();
-    }
-
     if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.closest('.desktop-icon-grid button')) {
         audioSys.playClick();
     }
@@ -508,10 +560,8 @@ function toggleMuteBtn() {
 }
 
 function setVolume(val) {
-    if (audioSys.masterGain) {
-        audioSys.masterGain.gain.value = val / 100;
-        document.getElementById('vol-level').innerText = val + '%';
-    }
+    audioSys.setVolume(val / 100);
+    document.getElementById('vol-level').innerText = val + '%';
 }
 
 function toggleScanlines() {
